@@ -168,6 +168,17 @@ int main ()
 	printf("统计二叉树的叶子结点个数：%d\n",Leafnum);
 	printf("交换二叉树中所有结点的左右子树！\n");
 	ExchangeBiTree(T);
+	
+	printf("先序遍历二叉树，结果是：\n");
+	PreOrderTraverse(T);
+	cout<<endl;
+	printf("中序遍历二叉树，结果是：\n");
+	InOrderTraverse(T);
+	cout<<endl;
+	printf("后序遍历二叉树，结果是：\n");
+	PostOrderTraverse(T);
+	cout<<endl;
+	
 	if(CopyBiTree(T,B)==Ok)printf("成功复制二叉树T到二叉树B！\n");
 	if(DestroyTree(T)==Ok)printf("成功销毁二叉树T！\n");
 	if(ClearTree(T)==Ok)printf("将二叉树T置为空树！\n");
