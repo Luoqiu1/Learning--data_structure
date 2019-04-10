@@ -3,8 +3,40 @@
 #define True 1
 #define Error 0
 #define Overflow -2
+//#define Link 0
+//#define Thread 1
 typedef int Status;
 typedef int TElemType;
+typedef enum PointTag{
+	Link,Thread
+};
+typedef struct BiThrTree{
+	TElemType data;
+	struct BiThrTree *lchild,*rchild;
+	PointTag LTag,RTag;
+}BiThrNode,*BiThrTree;
+
+Status CreateBiThrTree(BiThrTree &T)
+{
+	char ch;
+	scanf("%c",ch);getchar();
+	if(ch=='#')T=nullptr;
+	else {
+		if(!(T=(BiThrTree)malloc(sizeof(BiThrNode))))exit(Overflow);
+		T->data=ch;
+	//	T->LTag=Link;
+	//	T->RTag=Link;
+		CreateBiThrTree(T->lchild);
+		CreateBiThrTree(T->rchild);
+	}
+	return Ok;
+}
+/*
+Status InOrderThreading(BiThrTree &Thrt,BiThrTree T)
+{
+	
+}
+*/
 
 Status PrintElement(TElemType e)
 {
