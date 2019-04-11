@@ -4,12 +4,50 @@ using namespace std;
 #define Error 0
 #define Overflow -2
 #define True 1
+#define STACK_INIT_SIZE 100
+#define STACKINCREMENT 10
 typedef int Status;
+typedef char SElemType;
 typedef char TElemType;
 typedef struct LinkBitNode{
 	TElemType data;
 	LinkBitNode *rchild,*lchild;
 }LinkBitNode,*LinkBiTree;
+typedef struct SqStack{
+	SElemType *top,*base;
+	int stacksize;
+}SqStack;
+
+Status InitStack(SqStack &S)
+{
+	S.base=(SElemType*)malloc(sizeof(SElemType)*STACK_INIT_SIZE);
+	if(!S.base)exit(Overflow);
+	S.top=S.base;
+	S.stacksize=STACK_INIT_SIZE;
+	return Ok;
+}
+
+Status Pop(SqStack &S,SElemType &e)
+{
+	if(S.base==S.top)return Error;
+	S.top--;
+	e=*S.top;
+	return Ok;
+}
+
+Status Push(SqStack &S,SElemType e)
+{
+	if(S.base==S.top)return Error;
+	if(S.top-S.base>=S.stacksize){
+		S.base=(SElemType*)realloc(S.base,sizeof(SElemType)*(S.stacksize+STACKINCREMENT));
+		if(!S.base)exit(Overflow);
+		S.top=S.base+S.stacksize;
+		S.stacksize+=STACKINCREMENT;
+	}
+	*S.top=e;
+	S.top++;
+	return Ok;
+}
 
 Status InitBiTree(LinkBiTree &T)
 {
@@ -56,9 +94,21 @@ Status InitBiTree(LinkBiTree &T)
 	return Ok;
 }
 
+Status StackEmpty(SqStack S){
+	if(S.base==S.top)return Ok;
+	return !Ok;
+}
+
+Status PreOrderTraverse(LinkBiTree T,SqStack &S)
+{
+	
+}
+
 int main ()
 {
 	LinkBiTree T;
+	SqStack S;
+	InitStack(S);
 	InitBiTree(T);
 //	int cnt=0;
 //	while(T){
@@ -67,5 +117,6 @@ int main ()
 //		T=T->lchild; 
 //		cout<<cnt<<endl;
 //	}
+	PreOrderTraverse(T,S);
 	return Ok;
  }
