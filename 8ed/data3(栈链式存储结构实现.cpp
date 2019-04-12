@@ -107,22 +107,94 @@ Status PrinfTop(SqStack S)
 
 Status PreOrderTraverse(LinkBiTree T)
 {
+	//该段代码为何出错再议 
+//	
+//	SqStack S;InitStack(S);													
+//	Push(S,T);
+//	while(!StackEmpty(S)){
+//		if(T)//PrinfTop(S);
+//		cout<<(*S.top)->data;
+//	//	cout<<"here";
+//		if(T->lchild){
+//			T=T->lchild;
+//			Push(S,T); 
+//	//		cout<<"here";
+//		}
+//		else{
+//			T=nullptr;
+//			Pop(S,T);
+//			T=T->rchild;
+//		}
+//	}
+//	
+	//
+	
+	/*
 	SqStack S;InitStack(S);
-	Push(S,T);
-	while(!StackEmpty(S)){
-		if(T)PrinfTop(S);
-		cout<<"here";
-		if(T->lchild){
+	while(T||!StackEmpty(S)){
+		while(T){
+			cout<<T->data;
+		//	PrinfTop(S);
+		//	cout<<(*S.top)->data;
+			Push(S,T);
 			T=T->lchild;
-			Push(S,T); 
-			cout<<"here";
 		}
-		else{
-			T=nullptr;
+		if(!StackEmpty(S)){
 			Pop(S,T);
 			T=T->rchild;
 		}
 	}
+	*/
+
+
+	SqStack(S);InitStack(S);
+	while(T||!StackEmpty(S)){
+		while(T){
+			printf("%c",T->data);
+			Push(S,T);
+			T=T->lchild;
+		}
+		if(!StackEmpty(S)){
+			Pop(S,T);
+			T=T->rchild;
+		}
+	}
+
+
+
+}
+
+Status InOrderTraverse(LinkBiTree T)
+{
+// 
+//	SqStack(S);InitStack(S);
+//	while(T||!StackEmpty(S)){
+//		while(T){//一次直接找到左子树的最深处，最后是空指针退出，但不影响后续。
+//					//因为后续中弹出栈重新给T赋值，是空指针的时候没有用到！ 
+//			Push(S,T);
+//			T=T->lchild;
+//		}
+//		if(!StackEmpty(S)){
+//			Pop(S,T);
+//			printf("%c",T->data);
+//			T=T->rchild;
+//		}
+//	}
+//	
+
+	SqStack(S);InitStack(S);
+	while(T||!StackEmpty(S)){
+		if(T){
+			Push(S,T);
+			T=T->lchild;
+		}
+		else{
+			Pop(S,T);
+			printf("%c",T->data);
+			T=T->rchild;
+		}
+	} 
+	
 }
 
 int main ()
@@ -137,5 +209,7 @@ int main ()
 //		cout<<cnt<<endl;
 //	}
 	PreOrderTraverse(T);
+	cout<<endl;
+	InOrderTraverse(T);
 	return Ok;
  }
