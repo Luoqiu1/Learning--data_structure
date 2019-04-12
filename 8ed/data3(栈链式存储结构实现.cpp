@@ -7,12 +7,12 @@ using namespace std;
 #define STACK_INIT_SIZE 100
 #define STACKINCREMENT 10
 typedef int Status;
-typedef char SElemType;
 typedef char TElemType;
 typedef struct LinkBitNode{
 	TElemType data;
 	LinkBitNode *rchild,*lchild;
 }LinkBitNode,*LinkBiTree;
+typedef LinkBiTree SElemType;
 typedef struct SqStack{
 	SElemType *top,*base;
 	int stacksize;
@@ -37,7 +37,6 @@ Status Pop(SqStack &S,SElemType &e)
 
 Status Push(SqStack &S,SElemType e)
 {
-	if(S.base==S.top)return Error;
 	if(S.top-S.base>=S.stacksize){
 		S.base=(SElemType*)realloc(S.base,sizeof(SElemType)*(S.stacksize+STACKINCREMENT));
 		if(!S.base)exit(Overflow);
@@ -94,21 +93,41 @@ Status InitBiTree(LinkBiTree &T)
 	return Ok;
 }
 
-Status StackEmpty(SqStack S){
+Status StackEmpty(SqStack S)
+{
 	if(S.base==S.top)return Ok;
 	return !Ok;
 }
 
-Status PreOrderTraverse(LinkBiTree T,SqStack &S)
+Status PrinfTop(SqStack S)
 {
-	
+	printf("%c",(*S.top)->data);
+	return Ok;
+}
+
+Status PreOrderTraverse(LinkBiTree T)
+{
+	SqStack S;InitStack(S);
+	Push(S,T);
+	while(!StackEmpty(S)){
+		if(T)PrinfTop(S);
+		cout<<"here";
+		if(T->lchild){
+			T=T->lchild;
+			Push(S,T); 
+			cout<<"here";
+		}
+		else{
+			T=nullptr;
+			Pop(S,T);
+			T=T->rchild;
+		}
+	}
 }
 
 int main ()
 {
 	LinkBiTree T;
-	SqStack S;
-	InitStack(S);
 	InitBiTree(T);
 //	int cnt=0;
 //	while(T){
@@ -117,6 +136,6 @@ int main ()
 //		T=T->lchild; 
 //		cout<<cnt<<endl;
 //	}
-	PreOrderTraverse(T,S);
+	PreOrderTraverse(T);
 	return Ok;
  }
