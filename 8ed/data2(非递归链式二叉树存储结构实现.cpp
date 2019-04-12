@@ -99,9 +99,10 @@ Status StackEmpty(SqStack S)
 	return !Ok;
 }
 
-Status PrinfTop(SqStack S)
+Status GetTop(SqStack S,SElemType &e)
 {
-	printf("%c",(*S.top)->data);
+	if(S.base==S.top)return Error;
+	e=S.top[-1];
 	return Ok;
 }
 
@@ -159,43 +160,88 @@ Status PreOrderTraverse(LinkBiTree T)
 			T=T->rchild;
 		}
 	}
-
-
+	return Ok;
 
 }
 
 Status InOrderTraverse(LinkBiTree T)
 {
-// 
-//	SqStack(S);InitStack(S);
-//	while(T||!StackEmpty(S)){
-//		while(T){//一次直接找到左子树的最深处，最后是空指针退出，但不影响后续。
-//					//因为后续中弹出栈重新给T赋值，是空指针的时候没有用到！ 
-//			Push(S,T);
-//			T=T->lchild;
-//		}
-//		if(!StackEmpty(S)){
-//			Pop(S,T);
-//			printf("%c",T->data);
-//			T=T->rchild;
-//		}
-//	}
-//	
-
+	//我的做法，一次循环内嵌套循环遍历完左子树 
+ 
 	SqStack(S);InitStack(S);
 	while(T||!StackEmpty(S)){
-		if(T){
+		while(T){//一次直接找到左子树的最深处，最后是空指针退出，但不影响后续。
+					//因为后续中弹出栈重新给T赋值，是空指针的时候没有用到！ 
 			Push(S,T);
 			T=T->lchild;
 		}
-		else{
+		if(!StackEmpty(S)){
 			Pop(S,T);
 			printf("%c",T->data);
 			T=T->rchild;
 		}
-	} 
+	}
 	
+	// 
+	//课本做法 
+//	SqStack(S);InitStack(S);
+//	while(T||!StackEmpty(S)){
+//		if(T){
+//			Push(S,T);
+//			T=T->lchild;
+//		}
+//		else{
+//			Pop(S,T);
+//			printf("%c",T->data);
+//			T=T->rchild;
+//		}
+//	} 
+	return Ok;
 }
+
+Status PostOrderTraverse(LinkBiTree T)
+{
+	
+//	
+//	SqStack(S);InitStack(S);
+//	while(T||!StackEmpty(S)){
+//		while(T){
+//			Push(S,T);
+//			T=T->lchild;
+//		}
+//		GetTop(S,T);
+//		while(T){
+//			T=T->rchild;
+//			if(T)Push(S,T);
+//		}
+//		if(!StackEmpty(S)){
+//			Pop(S,T);
+//			printf("%c",T->data);
+//		}
+//	} 
+//	
+
+
+	SqStack(S);InitStack(S);
+	while(T||!StackEmpty(S)){
+	//	cout<<"here";
+		bool flag=true; 
+		if(T){
+			flag=!flag;
+			Push(S,T);T=T->lchild;
+		}
+		GetTop(S,T);T=T->rchild;
+		if(flag&&T){
+			Push(S,T);T=T->rchild;
+		}
+		else{
+	//		cout<<"here";
+			Pop(S,T);printf("%c",T->data);GetTop(S,T);T=T->rchild;
+		}
+	}
+	
+ } 
+
 
 int main ()
 {
@@ -211,5 +257,7 @@ int main ()
 	PreOrderTraverse(T);
 	cout<<endl;
 	InOrderTraverse(T);
+	cout<<endl;
+	PostOrderTraverse(T); 
 	return Ok;
  }
