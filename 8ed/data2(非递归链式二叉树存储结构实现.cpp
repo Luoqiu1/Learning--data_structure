@@ -245,7 +245,7 @@ Status PostOrderTraverse(LinkBiTree T)
 
 int main ()
 {
-	LinkBiTree T;
+	LinkBiTree T; 
 	InitBiTree(T);
 //	int cnt=0;
 //	while(T){
