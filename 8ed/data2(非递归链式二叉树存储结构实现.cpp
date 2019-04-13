@@ -92,9 +92,9 @@ Status InitBiTree(LinkBiTree &T)
 					}
 				}
 			}
-			free(ParentsTree);
-			ParentsTree=childTree;
-			ParentsTreeNum=NewParentsTree;
+			free(ParentsTree);//先释放空间 
+			ParentsTree=childTree;//再重新分配空间及其内容 
+			ParentsTreeNum=NewParentsTree;//子树升级为父树 
 			if(ParentsTreeNum==0)break;
 		}
 	}
