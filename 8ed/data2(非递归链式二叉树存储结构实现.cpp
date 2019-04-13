@@ -362,6 +362,48 @@ Status LevelOrderTraverse(LinkBiTree T)
 	return Ok;
 }
 
+int DeepLinkBiTree(LinkBiTree T)
+{
+	int cnt=0;
+	while(T){
+		cnt++;
+		T=T->lchild;
+	}
+	return cnt;
+}
+
+int LeafLinkBiTree(LinkBiTree T)
+{
+	SqStack(S);InitStack(S);
+	int cnt=0;
+	while(T||!StackEmpty(S)){
+		while(T){
+			Push(S,T);T=T->lchild;
+		}
+		if(!StackEmpty(S)){
+			Pop(S,T);cnt++;
+			T=T->rchild;
+		}
+	}
+	return cnt;
+}
+
+Status ExchangeLinkBiTree(LinkBiTree &T)
+{
+	LinkBiTree p=T;
+	LinkQueue(Q);InitQueue(Q);
+	EnQueue(Q,p);
+	while(!QueueEmpty(Q)){
+	//	cout<<"here";
+		DeQueue(Q,p);
+		LinkBiTree tmp;
+		tmp=p->lchild;p->lchild=p->rchild;p->rchild=tmp;
+		if(p->lchild)EnQueue(Q,p->lchild);
+		if(p->rchild)EnQueue(Q,p->rchild);
+	}
+	return Ok;
+}
+
 int main ()
 {
 	LinkBiTree T; 
@@ -373,12 +415,32 @@ int main ()
 //		T=T->lchild; 
 //		cout<<cnt<<endl;
 //	}
+	printf("输出二叉树的先序遍历结果：\n");
 	PreOrderTraverse(T);
 	cout<<endl;
+	printf("输出二叉树的中序遍历结果：\n");
 	InOrderTraverse(T);
 	cout<<endl;
+	printf("输出二叉树的后序遍历结果：\n");
 	PostOrderTraverse(T);
 	cout<<endl;
+	printf("输出二叉树的层序遍历结果：\n");
+	LevelOrderTraverse(T);
+	cout<<endl;
+	printf("求二叉树的深度，其深度为：%d\n",DeepLinkBiTree(T));
+	printf("求二叉树的叶子结点数，其叶子结点数为：%d\n",LeafLinkBiTree(T));
+	printf("交换二叉树的左右子树。\n");
+	ExchangeLinkBiTree(T);
+	printf("输出子树交换后的二叉树的先序遍历结果：\n");
+	PreOrderTraverse(T);
+	cout<<endl;
+	printf("输出子树交换后的中序遍历结果：\n");
+	InOrderTraverse(T);
+	cout<<endl;
+	printf("输出子树交换后的后序遍历结果：\n");
+	PostOrderTraverse(T);
+	cout<<endl;
+	printf("输出子树交换后的层序遍历结果：\n");
 	LevelOrderTraverse(T);
 	cout<<endl;
 	return Ok;
