@@ -8,12 +8,12 @@ using namespace std;
 #define STACKINCREMENT 10
 typedef int Status;
 typedef char TElemType;
-typedef char QElemType;
 typedef struct LinkBitNode{
 	TElemType data;
 	LinkBitNode *rchild,*lchild;
 }LinkBitNode,*LinkBiTree;
 typedef LinkBiTree SElemType;
+typedef LinkBiTree QElemType;
 typedef struct SqStack{
 	SElemType *top,*base;
 	int stacksize;
@@ -70,12 +70,11 @@ Status DeQueue(LinkQueue &Q,QElemType &e)
 
 Status EnQueue(LinkQueue &Q,QElemType e)
 {
-	if(Q.front==Q.rear)return Error;
 	Q.rear->next=(QNode*)malloc(sizeof(QNode));
 	if(!(Q.front->next))exit(Overflow);
 	Q.rear->next->data=e;
 	Q.rear->next->next=nullptr;
-	Q.rear=Q.rear->next; 
+	Q.rear=Q.rear->next;
 	return Ok;
 }
 
@@ -347,6 +346,21 @@ Status PostOrderTraverse(LinkBiTree T)
 	return Ok;
  } 
 
+Status LevelOrderTraverse(LinkBiTree T)
+{
+	LinkQueue Q;InitQueue(Q);
+	EnQueue(Q,T);
+//	printf("here");
+//	printf("QueueEmpty(Q)=%d",QueueEmpty(Q));
+	while(!QueueEmpty(Q)){
+//		printf("here");
+		DeQueue(Q,T);
+		if(T->lchild)EnQueue(Q,T->lchild);
+		if(T->rchild)EnQueue(Q,T->rchild);
+		printf("%c",T->data);
+	}
+	return Ok;
+}
 
 int main ()
 {
@@ -363,6 +377,9 @@ int main ()
 	cout<<endl;
 	InOrderTraverse(T);
 	cout<<endl;
-	PostOrderTraverse(T); 
+	PostOrderTraverse(T);
+	cout<<endl;
+	LevelOrderTraverse(T);
+	cout<<endl;
 	return Ok;
  }
