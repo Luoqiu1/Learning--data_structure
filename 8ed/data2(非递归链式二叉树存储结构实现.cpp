@@ -8,6 +8,7 @@ using namespace std;
 #define STACKINCREMENT 10
 typedef int Status;
 typedef char TElemType;
+typedef char QElemType;
 typedef struct LinkBitNode{
 	TElemType data;
 	LinkBitNode *rchild,*lchild;
@@ -17,14 +18,66 @@ typedef struct SqStack{
 	SElemType *top,*base;
 	int stacksize;
 }SqStack;
+typedef struct QNode{
+	QElemType data;
+	struct QNode *next;
+}QNode,*Queueptr;
+typedef struct LinkQueue{
+	Queueptr front,rear;
+}LinkQueue;
 typedef struct LinkBitNode2{
 	LinkBiTree T2;
 	bool falg=false;
-}LinkBitNode2,LinkBiTree2;
+}LinkBitNode2,*LinkBiTree2;
 typedef struct SqStack2{
-	LinkBiTree2 *top,*base; 
+	LinkBiTree2 top,base; 
 	bool flag=false;
 }SqStack2;
+
+Status InitQueue(LinkQueue &Q)
+{
+	Q.front=Q.rear=(QNode*)malloc(sizeof(QNode));
+	if(!Q.front)exit(Overflow);
+	Q.front->next=nullptr;
+	return Ok; 
+}
+
+Status QueueEmpty(LinkQueue Q)
+{
+	if(Q.front==Q.rear)return Ok;
+	return !Ok;
+}
+
+Status GetHead(LinkQueue Q,QElemType &e)
+{
+	if(Q.front==Q.rear)return Error;
+	e=Q.front->next->data;//队列采取同线性表的单链表一样，为操作方便起见，
+							//给链队列也添加一个头结点 Q.front ! 
+	return Ok;
+}
+
+Status DeQueue(LinkQueue &Q,QElemType &e)
+{
+	Queueptr q;
+	if(Q.front==Q.rear)return Error;
+	q=Q.front->next;
+	Q.front->next=q->next;
+	e=q->data;
+	if(Q.rear==q)Q.rear=Q.front;
+	free(q);
+	return Ok; 
+}
+
+Status EnQueue(LinkQueue &Q,QElemType e)
+{
+	if(Q.front==Q.rear)return Error;
+	Q.rear->next=(QNode*)malloc(sizeof(QNode));
+	if(!(Q.front->next))exit(Overflow);
+	Q.rear->next->data=e;
+	Q.rear->next->next=nullptr;
+	Q.rear=Q.rear->next; 
+	return Ok;
+}
 
 Status InitStack(SqStack &S)
 {
