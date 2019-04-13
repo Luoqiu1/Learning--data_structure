@@ -17,6 +17,14 @@ typedef struct SqStack{
 	SElemType *top,*base;
 	int stacksize;
 }SqStack;
+typedef struct LinkBitNode2{
+	LinkBiTree T2;
+	bool falg=false;
+}LinkBitNode2,LinkBiTree2;
+typedef struct SqStack2{
+	LinkBiTree2 *top,*base; 
+	bool flag=false;
+}SqStack2;
 
 Status InitStack(SqStack &S)
 {
@@ -202,7 +210,7 @@ Status InOrderTraverse(LinkBiTree T)
 Status PostOrderTraverse(LinkBiTree T)
 {
 	
-//	
+	// 该段代码为何出错再议
 //	SqStack(S);InitStack(S);
 //	while(T||!StackEmpty(S)){
 //		while(T){
@@ -220,26 +228,70 @@ Status PostOrderTraverse(LinkBiTree T)
 //		}
 //	} 
 //	
-
-
-	SqStack(S);InitStack(S);
-	while(T||!StackEmpty(S)){
-	//	cout<<"here";
-		bool flag=true; 
-		if(T){
-			flag=!flag;
-			Push(S,T);T=T->lchild;
+	
+	// 该段代码为何出错再议	
+//	SqStack(S);InitStack(S);
+//	while(T||!StackEmpty(S)){
+//	//	cout<<"here";
+//		bool flag=true; 
+//		if(T){
+//			flag=!flag;
+//			Push(S,T);T=T->lchild;
+//		}
+//		GetTop(S,T);T=T->rchild;
+//		if(flag&&T){
+//			Push(S,T);T=T->rchild;
+//		}
+//		else{
+//	//		cout<<"here";
+//			Pop(S,T);printf("%c",T->data);GetTop(S,T);T=T->rchild;
+//		}
+//	}
+	
+	
+/*	思路一 判断每个结点是否两次出现于栈顶，若为第二次出现栈顶，输出 
+	SqStack2(S);InitStack2(S);
+	LinkBiTree2 tmp;
+	while(T&&StackEmpty2(S)){
+		while(T){
+			tmp=(LinkBitNode2*)malloc(sizeof(LinkBitNode2));
+			tmp->T2=T;
+			tmp->falg=true;
+			Push2(S,tmp);T=T->lchild;
 		}
-		GetTop(S,T);T=T->rchild;
-		if(flag&&T){
-			Push(S,T);T=T->rchild;
-		}
-		else{
-	//		cout<<"here";
-			Pop(S,T);printf("%c",T->data);GetTop(S,T);T=T->rchild;
+		if(!StackEmpty2(S)){
+			GetTop2(S,tmp);
+			if(cur->falg){
+				tmp->falg=false;T=tmp->T2->rchild;
+			}
+			else{
+				Pop2(S,tmp);
+				printf("%c",tmp->T2->data);
+				tmp->T2=nullptr;
+			}
 		}
 	}
-	
+*/
+
+//思路二 判断结点是否有左右子树或者左右子树是否已被访问 
+	SqStack S;InitStack(S);
+	Push(S,T);
+	LinkBiTree pre=nullptr; 
+//	while(T||!StackEmpty(S)){ ←是错误的判断条件！！尤其注意！这一次没有 “T是否为真”这一条件！
+//								除了这一次的其他每次循环的条件都是(T||!StackEmpty(S)_) 
+//								因为在该思路下，尚未开始判断条件就已经压入一个结点了！
+//								该条件恒为真！  
+	while(!StackEmpty(S)){//这是该思路的正确判断条件 
+		GetTop(S,T);
+		if(!T->lchild&&!T->rchild||pre&&(pre==T->lchild||pre==T->rchild)){
+			Pop(S,T);printf("%c",T->data);pre=T;
+		}
+		else{
+			if(T->rchild)Push(S,T->rchild);
+			if(T->lchild)Push(S,T->lchild);
+		}
+	}
+	return Ok;
  } 
 
 
