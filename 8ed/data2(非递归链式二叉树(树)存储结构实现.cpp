@@ -34,6 +34,16 @@ typedef struct SqStack2{
 	bool flag=false;
 }SqStack2;
 
+int QueueLength(LinkQueue Q)
+{
+	int Length=0;
+	Queueptr q;
+	q=Q.front;
+	while(q!=Q.rear){
+		Length++;q=q->next;
+	}
+	return Length;
+}
 Status InitQueue(LinkQueue &Q)
 {
 	Q.front=Q.rear=(QNode*)malloc(sizeof(QNode));
@@ -109,8 +119,20 @@ Status Push(SqStack &S,SElemType e)
 }
 
 Status InitBiTree(LinkBiTree &T)
-{
-	char ch;
+{	//层序输入构建树（不仅限于度为二的二叉树）	例如要建立下图所示树，输入1#234#567###### 
+	//														   1
+	//												      #		    2
+	//													       3        4 
+	//														  #  5	  6    7 
+	//														    #  # # #  # # 
+	//过程通过线性表的链式存储结构实现
+	//思路是先建立树的根结点，建立一个存放结点指针的指针空间（类似指针数组的功能，不同的是这里是动态的）
+	//建立了根结点首先确立了第一个指针空间的大小。 
+	//每次循环完一次（循环完一层）得到子树的个数，通过记录字数的个数来重新分配二重指针的空间。
+	//下面的 j 标记着这在这一层中循环到了第几棵树（j=0表示第一颗树） 
+	//通过j%2和j/2表示左右子树和其父树处于二重指针中的位置
+	//结束后释放二重指针的空间，子树升级为父树重新分配二重指针的空间 
+	char ch;						
 	scanf("%c",&ch);
 	if(ch=='#'){
 		return Error;
@@ -132,15 +154,15 @@ Status InitBiTree(LinkBiTree &T)
 				if(ch!='#'){
 					LinkBitNode *curchild=(LinkBitNode*)malloc(sizeof(LinkBitNode));
 					childTree[NewParentsTree]=curchild;
-					curchild->data=ch;//对 
-					curchild->lchild=nullptr;//对 
-					curchild->rchild=nullptr;//对 
-					NewParentsTree++;//对 
+					curchild->data=ch;
+					curchild->lchild=nullptr;
+					curchild->rchild=nullptr;
+					NewParentsTree++;
 					if(j%2==0){
-						ParentsTree[j/2]->lchild=curchild;//对 
+						ParentsTree[j/2]->lchild=curchild; 
 					}
 					else{
-						ParentsTree[j/2]->rchild=curchild;//对 
+						ParentsTree[j/2]->rchild=curchild;
 					}
 				}
 			}
@@ -362,14 +384,66 @@ Status LevelOrderTraverse(LinkBiTree T)
 	return Ok;
 }
 
-int DeepLinkBiTree(LinkBiTree T)
+int StackDepth(SqStack S)
 {
-	int cnt=0;
-	while(T){
-		cnt++;
-		T=T->lchild;
+	if(S.base==S.top)exit(Overflow);
+	int Depth=S.top-S.base;
+	cout<<Depth<<endl; 
+	return Depth;
+}
+
+int DeepLinkBiTree(LinkBiTree T)
+{//利用后序遍历和栈的深度实现 
+//	int cnt=0;
+//	while(T){
+//		cnt++;
+//		T=T->lchild;
+//	}
+//	return cnt;
+
+	//后序似乎出现了点小问题，再议。 
+//	SqStack(S);InitStack(S);
+	int Depth=0;
+	int MaxDepth=1;
+//	Push(S,T);
+//	LinkBiTree pre=nullptr;
+//	while(!StackEmpty(S)){
+//		GetTop(S,T);
+//		if(!T->lchild&&!T->rchild||pre&&(pre==T->lchild||pre==T->rchild)){
+//			if(!T->lchild&&!T->rchild)Depth=StackDepth(S);
+//			Pop(S,T);
+//			pre=T;
+//			if(Depth>MaxDepth)MaxDepth=Depth;
+//		}
+//		else{
+//			if(T->rchild)Push(S,T->rchild);
+//			if(T->lchild)Push(S,T->lchild);
+//		}
+//	}
+//	return MaxDepth;
+	//似乎不用队列（层序）不方便实现 
+//	SqStack(S);InitStack(S);
+//	while(T||!StackEmpty(S)){
+//		while(T){
+//			Push(S,T);
+//			T=T->lchild;
+//		}
+//		if(T->rchild){
+//			
+//		}
+//	}
+	LinkQueue(Q);InitQueue(Q);
+	EnQueue(Q,T);
+	while(!QueueEmpty(Q)){
+		int len=QueueLength(Q);
+		while(len--){
+			DeQueue(Q,T);
+			if(T->lchild)EnQueue(Q,T->lchild);
+			if(T->rchild)EnQueue(Q,T->rchild);	
+		}
+		Depth++;
 	}
-	return cnt;
+	return Depth;
 }
 
 int LeafLinkBiTree(LinkBiTree T)
@@ -406,6 +480,7 @@ Status ExchangeLinkBiTree(LinkBiTree &T)
 
 int main ()
 {
+	printf("请输入二叉树："); 
 	LinkBiTree T; 
 	InitBiTree(T);
 //	int cnt=0;
@@ -431,16 +506,16 @@ int main ()
 	printf("求二叉树的叶子结点数，其叶子结点数为：%d\n",LeafLinkBiTree(T));
 	printf("交换二叉树的左右子树。\n");
 	ExchangeLinkBiTree(T);
-	printf("输出子树交换后的二叉树的先序遍历结果：\n");
+	printf("输出子二叉树交换后的二叉树的先序遍历结果：\n");
 	PreOrderTraverse(T);
 	cout<<endl;
-	printf("输出子树交换后的中序遍历结果：\n");
+	printf("输出子二叉树交换后的中序遍历结果：\n");
 	InOrderTraverse(T);
 	cout<<endl;
-	printf("输出子树交换后的后序遍历结果：\n");
+	printf("输出子二叉树交换后的后序遍历结果：\n");
 	PostOrderTraverse(T);
 	cout<<endl;
-	printf("输出子树交换后的层序遍历结果：\n");
+	printf("输出子二叉树交换后的层序遍历结果：\n");
 	LevelOrderTraverse(T);
 	cout<<endl;
 	return Ok;
