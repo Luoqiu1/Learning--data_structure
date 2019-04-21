@@ -121,9 +121,25 @@ Status InOrderThreading(BiThrTree T,BiThrTree &Thrt)
 					pre->RTag=Thread;pre->rchild=T; 
 				}
 				pre=T;
+				T=T->rchild;
 			}
 		}
 	}
+	return Ok;
+}
+
+Status InOrderTraverse_Thr(BiThrTree T)
+{
+	BiThrTree p=T->lchild;
+	while(p!=T){
+		while(p->LTag==Link)p=p->lchild;
+		cout<<p->data;
+		while(p->RTag==Thread&&p->rchild!=T){
+		p=p->rchild;cout<<p->data;
+		}
+		p=p->rchild;
+	}
+	return Ok;
 }
 
 int main()
@@ -132,5 +148,6 @@ int main()
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
 	InOrderThreading(T,Thrt);
+	InOrderTraverse_Thr(Thrt);cout<<endl;
 	return 0;
 }
