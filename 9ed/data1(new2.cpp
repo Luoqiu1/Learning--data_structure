@@ -87,7 +87,14 @@ Status InOrderTraverse_Thr(BiThrTree T)
 {
 	BiThrTree p=T->lchild;
 	while(p!=T){
-		while(p->LTag==Link)p=p->lchild;
+		while(p->LTag==Link){
+//			if(p->data=='5'){
+//				cout<<"4yes";
+//				if(p->LTag==Thread)cout<<"Thread";else cout<<"Link";
+//			}
+//			else cout<<"4no";
+			p=p->lchild;
+		}
 		cout<<p->data;
 		while(p->RTag==Thread&&p->rchild!=T){
 		p=p->rchild;cout<<p->data;
