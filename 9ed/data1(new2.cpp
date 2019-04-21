@@ -15,6 +15,7 @@ typedef struct BiThrNode{
 	struct BiThrNode *lchild,*rchild;
 	PointerTag LTag,RTag;
 }BiThrNode,*BiThrTree;
+BiThrTree pre=nullptr;
 
 Status CreateBiThrTree(BiThrTree &T)
 {
@@ -52,103 +53,40 @@ Status CreateBiThrTree(BiThrTree &T)
 	}
 }
 
-typedef BiThrTree SElemType;
-typedef struct SqStack{
-	SElemType *top,*base;
-	int stacksize;
-}SqStack;
-Status InitStack(SqStack &S)
+void InThreading(BiThrTree p)
 {
-	S.base=(SElemType*)malloc(sizeof(SElemType)*STACK_INIT_SIZE);
-	if(!S.base)exit(Overflow);
-	S.top=S.base;
-	S.stacksize=STACK_INIT_SIZE;
-	return Ok;
-}
-Status Pop(SqStack &S,SElemType &e)
-{
-	if(S.base==S.top)return Error;
-	S.top--;
-	e=*S.top;
-	return Ok;
-}
-Status Push(SqStack &S,SElemType e)
-{
-	if(S.top-S.base>=S.stacksize){
-		S.base=(SElemType*)realloc(S.base,sizeof(SElemType)*(S.stacksize+STACKINCREMENT));
-		if(!S.base)exit(Overflow);
-		S.top=S.base+S.stacksize;
-		S.stacksize+=STACKINCREMENT;
+	if(p){
+		InThreading(p->lchild);
+		if(!p->lchild){
+			p->LTag=Thread;p->lchild=pre;
+		}
+		if(!pre->rchild){
+			pre->RTag=Thread;pre->rchild=p;
+		}
+		pre=p;
+		InThreading(p->rchild);
 	}
-	*S.top=e;
-	S.top++;
-	return Ok;
-}
-Status StackEmpty(SqStack S)
-{
-	if(S.base==S.top)return Ok;
-	return !Ok;
-}
-
-Status GetTop(SqStack S,SElemType &e)
-{
-	if(S.base==S.top)return Error;
-	e=S.top[-1];
-	return Ok;
 }
 
 Status InOrderThreading(BiThrTree T,BiThrTree &Thrt)
 {
-	SqStack S;InitStack(S);
-	BiThrTree pre;
 	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));if(!Thrt)exit(Overflow);
 	Thrt->LTag=Link;Thrt->RTag=Thread;
 	Thrt->rchild=Thrt;
 	if(!T)Thrt->lchild=Thrt;
 	else{
-		Thrt->lchild=T;pre=Thrt;
-		while(T||!StackEmpty(S)){
-			cout<<"here";
-			while(T->LTag==Link){
-				cout<<"here";
-				Push(S,T);T=T->lchild;
-			}
-			Pop(S,T);
-			T->LTag=Thread;T->lchild=pre;
-			pre=T;
-			if(!StackEmpty(S)){
-				GetTop(S,T);
-				if(T->rchild)T=T->rchild;
-				else {
-					Pop(S,T);pre=T;
-				}
-			}
-			
-			
-//			if(!StackEmpty(S)){
-//				Pop(S,T);if(!T->lchild){//若当前结点无左子树，说明现在正在中序访问这一结点。
-//										//那么此时他的 前驱结点 已确定！ 
-//					T->LTag=Thread;T->lchild=pre;
-//				}
-//				pre=T;
-//				if(!T->rchild&&!StackEmpty(S)){ //若上次记录的结点没有右子树了，说明已经中序访问过该结点了。 
-//										//那么此时上次记录的结点的 后继结点 已确定！ 
-//					pre->RTag=Thread;pre->rchild=T; 
-//				}
-//				
-//				T=T->rchild;
-//			}
-
-		}
+		Thrt->lchild=T;
+		pre=Thrt;
+		InThreading(T);
+		pre->rchild=Thrt;pre->RTag=Thread;
+		Thrt->rchild=pre;
 	}
-	return Ok;
 }
 
 Status InOrderTraverse_Thr(BiThrTree T)
 {
 	BiThrTree p=T->lchild;
 	while(p!=T){
-		cout<<"here";
 		while(p->LTag==Link)p=p->lchild;
 		cout<<p->data;
 		while(p->RTag==Thread&&p->rchild!=T){
@@ -159,12 +97,11 @@ Status InOrderTraverse_Thr(BiThrTree T)
 	return Ok;
 }
 
-int main()
+int main ()
 {
 	BiThrTree T,Thrt;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
 	InOrderThreading(T,Thrt);
 	InOrderTraverse_Thr(Thrt);cout<<endl;
-	return 0;
 }
