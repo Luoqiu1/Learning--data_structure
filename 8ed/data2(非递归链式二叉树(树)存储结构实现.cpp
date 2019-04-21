@@ -366,7 +366,7 @@ Status PostOrderTraverse(LinkBiTree T)
 		}
 	}
 	return Ok;
- } 
+ }
 
 Status LevelOrderTraverse(LinkBiTree T)
 {
@@ -394,13 +394,6 @@ int StackDepth(SqStack S)
 
 int DeepLinkBiTree(LinkBiTree T)
 {//利用后序遍历和栈的深度实现 
-//	int cnt=0;
-//	while(T){
-//		cnt++;
-//		T=T->lchild;
-//	}
-//	return cnt;
-
 	//后序似乎出现了点小问题，再议。 
 //	SqStack(S);InitStack(S);
 	int Depth=0;
@@ -422,6 +415,7 @@ int DeepLinkBiTree(LinkBiTree T)
 //	}
 //	return MaxDepth;
 	//似乎不用队列（层序）不方便实现 
+	//先中序无法实现求深度！ 
 //	SqStack(S);InitStack(S);
 //	while(T||!StackEmpty(S)){
 //		while(T){
@@ -432,6 +426,7 @@ int DeepLinkBiTree(LinkBiTree T)
 //			
 //		}
 //	}
+	//层序求深度 
 	LinkQueue(Q);InitQueue(Q);
 	EnQueue(Q,T);
 	while(!QueueEmpty(Q)){
