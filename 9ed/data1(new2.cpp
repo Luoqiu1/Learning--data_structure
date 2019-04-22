@@ -23,7 +23,8 @@ Status CreateBiThrTree(BiThrTree &T)
 	if(!T)exit(Overflow);
 	char ch;scanf("%c",&ch);
 	if(ch=='#')exit(Overflow);
-	T->data=ch;T->lchild=nullptr;T->rchild=nullptr;//T->LTag=Thread;T->RTag=Thread; 
+	T->data=ch;T->lchild=nullptr;T->rchild=nullptr;T->LTag=Link;T->RTag=Link;//刚开始初始化的时候
+										//在创建线索二叉树的时候，标志域均初始化为Link！ 
 	int FatherNum=1;
 	BiThrNode **FatherTree=(BiThrNode**)malloc(sizeof(BiThrNode*)*FatherNum);
 	FatherTree[0]=T;
@@ -33,7 +34,7 @@ Status CreateBiThrTree(BiThrTree &T)
 		int j=0;int NewChildNum=0;
 		while(ChildNum--){
 			scanf("%c",&ch);if(ch=='#')j++;
-			else{	
+			else{
 				BiThrTree q=(BiThrNode*)malloc(sizeof(BiThrNode));
 				if(!q)exit(Overflow);
 				q->data=ch;q->lchild=nullptr;q->rchild=nullptr;
@@ -143,14 +144,58 @@ Status InOrderTraverse_Thr(BiThrTree T)
 	return Ok;
 }
 
+void PreThreading(BiThrTree p)
+{
+	if(!p){
+		p->LTag=Thread;p->lchild=pre;
+		pre->RTag=Thread;pre->rchild=p;
+		pre=p;
+		PreThreading(p->lchild);
+		PreThreading(p->rchild);
+	}
+ }
+
+Status PreOrderThreading(BiThrTree T,BiThrTree &Thrt)
+{
+	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));
+	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
+	if(!T)Thrt->lchild=Thrt;
+	else{
+		Thrt->lchild=T;pre=Thrt;
+		PreThreading(T);
+		pre->rchild=Thrt;pre->RTag=Thread;
+		Thrt->rchild=pre;
+	}
+	return Ok;
+}
+
+Status PreOrderTraverse_Thr(BiThrTree T)
+{
+	BiThrTree p=T->lchild;cout<<p->data;
+	while(p!=T){
+		while(p->LTag==Link){
+		p=p->lchild;cout<<p->data;
+		}
+		while(p->RTag==Thread&&p->rchild!=T){
+			p=p->rchild;cout<<p->data;
+		}
+		p=p->rchild;
+	}
+}
+
 int main ()
 {
-	BiThrTree T,Thrt;
+	BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
-	//printf("here");
-	InOrderThreading(T,Thrt);
-	//InThreading(T);
-	//printf("here");
-	InOrderTraverse_Thr(Thrt);cout<<endl;
+	printf("中序线索化二叉树，并输出二叉树：");
+	InOrderThreading(T,ThrtIn);
+	InOrderTraverse_Thr(ThrtIn);cout<<endl;
+	printf("前序线索化二叉树，并输出二叉树：");
+	PreOrderThreading(T,ThrtIn);
+	PreOrderTraverse_Thr(ThrtIn);cout<<endl;
+//	printf("后序线索化二叉树，并输出二叉树：");
+//	PostOrderThreading(T,ThrtIn);
+//	PostOrderTraverse_Thr(ThrtIn);cout<<endl;
+	return 0; 
 }
