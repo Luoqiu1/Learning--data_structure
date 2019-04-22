@@ -147,37 +147,17 @@ Status InOrderTraverse_Thr(BiThrTree T)
 void PreThreading(BiThrTree p)
 {
 	if(p){
-			//	cout<<"here3";
-		
-//		if(p->data=='5'){
-//			printf("pre:%c ,preRTag:%d pre->data:%c",pre->data,pre->RTag,pre->rchild->data);
-//			
-//		}
-		BiThrTree four=(BiThrTree)0x4ac030;
-		printf("  %c  %d  ",p->data,four->RTag);
-		if(pre->data=='4'){
-			printf("p:%c preThr:%d \n",p->data,pre->RTag);
-		//	cout<<&pre<<endl;
-		}
-		if(p->data=='4'){
-			printf("p:%c pThr:%d \n",p->data,p->RTag);
-		}
-			
 		if(!p->lchild){
 			p->lchild=pre;p->LTag=Thread;
 		}
 		if(!pre->rchild){
-				if(pre->data=='4'){
-					cout<<"here";cout<<pre->RTag;
-				}
 			pre->rchild=p;pre->RTag=Thread;
 		}
 		pre=p;
 		if(p->LTag==Link)PreThreading(p->lchild);
-	//	if(!p->rchild)p->RTag=Thread;
 		if(p->RTag==Link)PreThreading(p->rchild);
 	}
- }
+}
 
 Status PreOrderThreading(BiThrTree T,BiThrTree &Thrt)
 {
@@ -196,21 +176,16 @@ Status PreOrderThreading(BiThrTree T,BiThrTree &Thrt)
 
 Status PreOrderTraverse_Thr(BiThrTree T)
 {
-	BiThrTree p=T->lchild;cout<<p->data;
+	BiThrTree p=T->lchild;
 	while(p!=T){
-		int cnt=0;
+		cout<<p->data;
 		while(p->LTag==Link){
-			cnt++;
-	//	p=p->lchild;cout<<p->data;
-	//	cout<<"here1"<<endl;
+		p=p->lchild;cout<<p->data;
 		}
-	//	cout<<' '<<cnt<<' ';
 //		while(p->RTag==Thread&&p->rchild!=T){
 //			p=p->rchild;cout<<p->data;
 //		}
-	//	cout<<"here32413"<<endl;
 	//	cout<<p->data; 
-	//	if(p->data=='4')cout<<p->rchild->data; 
 		p=p->rchild;
 	}
 }
@@ -220,9 +195,9 @@ int main ()
 	BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
-	printf("中序线索化二叉树，并输出二叉树：");
-	InOrderThreading(T,ThrtIn);
-	InOrderTraverse_Thr(ThrtIn);cout<<endl;
+//	printf("中序线索化二叉树，并输出二叉树：");
+//	InOrderThreading(T,ThrtIn);
+//	InOrderTraverse_Thr(ThrtIn);cout<<endl;
 	printf("前序线索化二叉树，并输出二叉树：");
 	PreOrderThreading(T,ThrtPre);
 	PreOrderTraverse_Thr(ThrtPre);cout<<endl;
