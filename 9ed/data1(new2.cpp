@@ -146,22 +146,23 @@ Status InOrderTraverse_Thr(BiThrTree T)
 
 void PreThreading(BiThrTree p)
 {
-	if(!p){
-		p->LTag=Thread;p->lchild=pre;
-		pre->RTag=Thread;pre->rchild=p;
-		pre=p;
-		PreThreading(p->lchild);
-		PreThreading(p->rchild);
+	if(p){
+			//	cout<<"here3";
+		
+		if(p->LTag==Link)PreThreading(p->lchild);
+		p->LTag=Thread;
+		if(p->RTag==Link)PreThreading(p->rchild);
 	}
  }
 
 Status PreOrderThreading(BiThrTree T,BiThrTree &Thrt)
 {
-	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));
+	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));if(!Thrt)exit(Overflow);
 	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
 	if(!T)Thrt->lchild=Thrt;
 	else{
-		Thrt->lchild=T;pre=Thrt;
+		Thrt->lchild=T;
+	//	pre=Thrt;
 		PreThreading(T);
 		pre->rchild=Thrt;pre->RTag=Thread;
 		Thrt->rchild=pre;
