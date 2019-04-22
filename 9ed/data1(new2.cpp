@@ -149,15 +149,27 @@ void PreThreading(BiThrTree p)
 	if(p){
 			//	cout<<"here3";
 		
-		if(p->data=='5'){
-			printf("pre:%c ,preRTag:%d pre->data:%c",pre->data,pre->RTag,pre->rchild->data);
-			
+//		if(p->data=='5'){
+//			printf("pre:%c ,preRTag:%d pre->data:%c",pre->data,pre->RTag,pre->rchild->data);
+//			
+//		}
+		BiThrTree four=(BiThrTree)0x4ac030;
+		printf("  %c  %d  ",p->data,four->RTag);
+		if(pre->data=='4'){
+			printf("p:%c preThr:%d \n",p->data,pre->RTag);
+		//	cout<<&pre<<endl;
+		}
+		if(p->data=='4'){
+			printf("p:%c pThr:%d \n",p->data,p->RTag);
 		}
 			
 		if(!p->lchild){
 			p->lchild=pre;p->LTag=Thread;
 		}
 		if(!pre->rchild){
+				if(pre->data=='4'){
+					cout<<"here";cout<<pre->RTag;
+				}
 			pre->rchild=p;pre->RTag=Thread;
 		}
 		pre=p;
