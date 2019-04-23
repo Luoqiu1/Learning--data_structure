@@ -347,15 +347,4 @@ int Tree_Degree(Tree* tree)
 	return deg;
 }
 
-//int main ()
-//{
-//	Tree tree;
-//	Create_tree();
-//	Insert_Tree(&tree,'a',3,3,3);
-//	Display(&tree);
-//	Tree_Destroy(&tree);
-//	Tree_Height(&tree);
-//	Tree_Count(&tree);
-//	return 0;
-//}
 
