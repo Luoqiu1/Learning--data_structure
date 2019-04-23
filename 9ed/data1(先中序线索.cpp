@@ -201,17 +201,25 @@ Status PostOrderTraverse_Thr(BiThrTree T)
 
 int main ()
 {
-	BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
-	printf("层序创建二叉树，输入结点的值：\n");
-	CreateBiThrTree(T);
-	printf("中序线索化二叉树，并输出二叉树：");
-	InOrderThreading(T,ThrtIn);
-	InOrderTraverse_Thr(ThrtIn);cout<<endl;
-//	printf("前序线索化二叉树，并输出二叉树：");
-//	PreOrderThreading(T,ThrtPre);
-//	PreOrderTraverse_Thr(ThrtPre);cout<<endl;
-//	printf("后序线索化二叉树，并输出二叉树：");
-//	PostOrderThreading(T,ThrtPost);
-//	PostOrderTraverse_Thr(ThrtPost);cout<<endl;
+	int choose;
+	do{
+		printf("请输入 1 或者 2 ，分别表示执行 前序线索化 或 中序线索化\n");
+		printf("输入 0 表示结束程序：");
+		scanf("%d",&choose);getchar();
+		if(choose==0)break;
+		BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
+		printf("层序创建二叉树，输入结点的值：\n");
+		CreateBiThrTree(T);
+		if(choose==2){
+			printf("中序线索化二叉树，并输出二叉树：");
+		InOrderThreading(T,ThrtIn);
+		InOrderTraverse_Thr(ThrtIn);cout<<endl<<endl;
+		}
+		else {
+			printf("前序线索化二叉树，并输出二叉树：");
+		PreOrderThreading(T,ThrtPre);
+		PreOrderTraverse_Thr(ThrtPre);cout<<endl<<endl;
+		}
+	}while(1);
 	return 0; 
 }
