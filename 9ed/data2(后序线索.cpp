@@ -1,4 +1,5 @@
 #include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 #define True 1
 #define Error 0
@@ -57,58 +58,49 @@ q->LTag=Link;q->RTag=Link;  //这里仔细。。。！再看看为什么少这两语句会错
 	}
 }
 
-
-
-void InThreading(BiThrTree p)
-{//中序线索化 
-	if(p){
-		InThreading(p->lchild);
-		if(!p->lchild){
-			p->LTag=Thread;p->lchild=pre;
-		}
-		if(!pre->rchild){
-			pre->RTag=Thread;pre->rchild=p;
-		}
-		pre=p;
-		InThreading(p->rchild);
+BiThrTree SearchPost(BiThrTree p)
+{
+	if(p->lchild){
+		return SearchPost(p->lchild);																																			SearchPost(p->lchild);
 	}
+	else if(p->rchild){
+		return SearchPost(p->rchild);
+	}
+	else return p;
 }
 
-Status InOrderThreading(BiThrTree T,BiThrTree &Thrt)
+void PostThreading(BiThrTree p)
 {
-	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));if(!Thrt)exit(Overflow);
-	Thrt->LTag=Link;  //头结点“左子树”（应该）非空 
-	Thrt->RTag=Thread;//头结点“右子树”暂空 
-	Thrt->rchild=Thrt;//回指自身，以防止在线索化时出现指向首结点（首结点是第一个有意义的结点，不是头结点） 
+	if(p){
+		if(p==p->father->lchild&&p->father->rchild){
+			BiThrTree Post=SearchPost(p->father->rchild);
+			p->RTag=Thread;p->rchild=Post;
+			Post->LTag=Thread;Post->lchild=p;
+		}
+		else if(p==p->father->rchild||p==p->father->lchild&&!p->rchild){
+			if(!p->lchild){
+				p->LTag=Thread;p->lchild=p->father;
+			}
+			p->RTag=Thread;p->rchild=p->father;
+		}
+		
+	} 
+}
+
+Status PostOrderThreading(BiThrTree T,BiThrTree &Thrt)
+{
+	if(!(Thrt=(BiThrNode*)malloc(sizeof(BiThrNode))))exit(Overflow);
+	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
 	if(!T)Thrt->lchild=Thrt;
 	else{
 		Thrt->lchild=T;
 		pre=Thrt;
-		InThreading(T);
-		pre->rchild=Thrt;pre->RTag=Thread;//最后一个结点指向头结点 
+		PostThreading(T);
+		pre->RTag=Thread;pre->rchild=Thrt;
 		Thrt->rchild=pre;
-	}
-}
-
-Status InOrderTraverse_Thr(BiThrTree T)
-{//中序遍历 
-	BiThrTree p=T->lchild;
-	while(p!=T){
-		while(p->LTag==Link){//访问到最左下子树 
-			p=p->lchild;
-		}
-		cout<<p->data;cout<<p->father->data<<' ';//中序输出结点 
-		while(p->RTag==Thread&&p->rchild!=T){//线索访问后继 
-		p=p->rchild;cout<<p->data;//直接输出后继
-		if(p->father)cout<<p->father->data<<' ';
-		else cout<<"  ";
-		}
-		p=p->rchild;//1、有右子树，进入，并进入寻找下一次中序输出的第一个结点。 
-					//2、p->rchild==T，进入，结束循环 
 	}
 	return Ok;
 }
-
 
 
 
@@ -117,8 +109,7 @@ int main ()
 	BiThrTree T,Thrt;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
-	printf("中序线索化二叉树，并输出二叉树：");
-	InOrderThreading(T,Thrt);
-	InOrderTraverse_Thr(Thrt);cout<<endl;
+	PostOrderThreading(T,Thrt);
+//	PostOrderTraverse_Thr(Thrt);cout<<endl;
 	return 0;
 }
