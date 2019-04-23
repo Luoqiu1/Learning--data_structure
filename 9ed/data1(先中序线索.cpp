@@ -150,6 +150,55 @@ Status PreOrderTraverse_Thr(BiThrTree T)
 	}
 }
 
+void PostThreading(BiThrTree p)
+{
+	if(p){
+		if(p->LTag==Link)PostThreading(p->lchild);
+		if(p->RTag==Link)PostThreading(p->rchild);
+		if(!p->lchild){
+			p->LTag=Thread;p->lchild=pre;
+		}
+		if(!pre->rchild){
+			pre->RTag=Thread;pre->rchild=p;
+		}
+		pre=p;
+	}
+ } 
+
+Status PostOrderThreading(BiThrTree T,BiThrTree Thrt)
+{
+	Thrt=(BiThrNode*)malloc(sizeof(BiThrNode));if(!Thrt)exit(Overflow);
+	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
+	if(!T)Thrt->lchild=Thrt;
+	else{
+		Thrt->lchild=T;
+		pre=Thrt;
+		PostThreading(T);
+		pre->rchild=Thrt;pre->RTag=Thread;
+		Thrt->rchild=pre;
+	}
+	return Ok;
+}
+
+Status PostOrderTraverse_Thr(BiThrTree T)
+{
+	BiThrTree p=T->lchild;
+	while(p!=T){
+		while(p->LTag==Link){
+			p=p->lchild;
+		}
+		while(p->RTag==Link){
+			p=p->rchild;
+		}
+		if(p->LTag==Thread&&p->RTag==Thread){
+			cout<<p->data;p=p->rchild;
+		}
+		else{
+		//	if(p->LTag==Link)p=p->lchild;
+		}
+	}
+}
+
 int main ()
 {
 	BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
@@ -158,11 +207,12 @@ int main ()
 //	printf("中序线索化二叉树，并输出二叉树：");
 //	InOrderThreading(T,ThrtIn);
 //	InOrderTraverse_Thr(ThrtIn);cout<<endl;
-	printf("前序线索化二叉树，并输出二叉树：");
-	PreOrderThreading(T,ThrtPre);
-	PreOrderTraverse_Thr(ThrtPre);cout<<endl;
-//	printf("后序线索化二叉树，并输出二叉树：");
-//	PostOrderThreading(T,ThrtPost);
-//	PostOrderTraverse_Thr(ThrtPost);cout<<endl;
+//	printf("前序线索化二叉树，并输出二叉树：");
+//	PreOrderThreading(T,ThrtPre);
+//	PreOrderTraverse_Thr(ThrtPre);cout<<endl;
+	printf("后序线索化二叉树，并输出二叉树：");
+	PostOrderThreading(T,ThrtPost);
+	PostOrderTraverse_Thr(ThrtPost);cout<<endl;
+	cout<<"here";
 	return 0; 
 }
