@@ -58,58 +58,106 @@ q->LTag=Link;q->RTag=Link;  //这里仔细。。。！再看看为什么少这两语句会错
 	}
 }
 
-BiThrTree SearchPost(BiThrTree p)
-{
-	if(p->lchild){
-		return SearchPost(p->lchild);																																			SearchPost(p->lchild);
-	}
-	else if(p->rchild){
-		return SearchPost(p->rchild);
-	}
-	else return p;
-}
+//BiThrTree SearchPost(BiThrTree p)
+//{
+//	if(p->lchild){
+//		return SearchPost(p->lchild);																																			SearchPost(p->lchild);
+//	}
+//	else if(p->rchild){
+//		return SearchPost(p->rchild);
+//	}
+//	else return p;
+//}
+//
+//void PostThreading(BiThrTree p)
+//{
+//	if(p){
+//		PostThreading(p->lchild);
+//		PostThreading(p->rchild);
+//		if(!p->father){
+//		}
+//		else if(p==p->father->lchild&&p->father->rchild){
+//			BiThrTree Post=SearchPost(p->father->rchild);
+//			p->RTag=Thread;p->rchild=Post;
+//			Post->LTag=Thread;Post->lchild=p;
+//		}
+//		else if(p==p->father->rchild||p==p->father->lchild&&!p->rchild){
+//			if(!p->lchild){
+//				p->LTag=Thread;p->lchild=p->father;
+//			}
+//			p->RTag=Thread;p->rchild=p->father;
+//		}
+//		pre=p;
+//	} 
+//}
 
 void PostThreading(BiThrTree p)
 {
 	if(p){
-		if(p==p->father->lchild&&p->father->rchild){
-			BiThrTree Post=SearchPost(p->father->rchild);
-			p->RTag=Thread;p->rchild=Post;
-			Post->LTag=Thread;Post->lchild=p;
+	//	cout<<"here";
+		PostThreading(p->lchild);
+		PostThreading(p->rchild);
+		if(!p->lchild){
+			p->LTag=Thread;
+			p->lchild=pre;
 		}
-		else if(p==p->father->rchild||p==p->father->lchild&&!p->rchild){
-			if(!p->lchild){
-				p->LTag=Thread;p->lchild=p->father;
-			}
-			p->RTag=Thread;p->rchild=p->father;
+		if(pre&&!pre->rchild){
+			pre->RTag=Thread;
+			pre->rchild=p;
 		}
-		
-	} 
+		pre=p;
+	}
 }
 
-Status PostOrderThreading(BiThrTree T,BiThrTree &Thrt)
+//Status PostOrderThreading(BiThrTree T,BiThrTree &Thrt)
+//{
+//	if(!(Thrt=(BiThrNode*)malloc(sizeof(BiThrNode))))exit(Overflow);
+//	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
+//	if(!T)Thrt->lchild=Thrt;
+//	else{
+//		Thrt->lchild=T;
+//		pre=Thrt;
+//		PostThreading(T);
+//		pre->RTag=Thread;pre->rchild=Thrt;
+//		Thrt->rchild=pre;
+//	}
+//	return Ok;
+//}
+
+Status PostOrderTraverse_Thr(BiThrTree T)
 {
-	if(!(Thrt=(BiThrNode*)malloc(sizeof(BiThrNode))))exit(Overflow);
-	Thrt->LTag=Link;Thrt->RTag=Thread;Thrt->rchild=Thrt;
-	if(!T)Thrt->lchild=Thrt;
-	else{
-		Thrt->lchild=T;
-		pre=Thrt;
-		PostThreading(T);
-		pre->RTag=Thread;pre->rchild=Thrt;
-		Thrt->rchild=pre;
+//	cout<<"here2";
+	if(T){//T是首结点，非头结点 
+	//	cout<<"here3";
+		BiThrTree p=T;
+		pre=nullptr;//这个必须要有！重置pre 
+		while(pre!=T){
+		//	cout<<"here4";
+			while(p->LTag==Link){
+				p=p->lchild;
+			}
+			while(p&&p->RTag==Thread){
+				cout<<p->data;
+				pre=p;
+				p=p->rchild; 
+			}
+			while(pre!=T&&p->rchild==pre){
+				cout<<p->data;
+				pre=p;
+				if(pre!=T)p=p->father;
+			}
+			if(p->RTag==Link)p=p->rchild;
+		}
 	}
 	return Ok;
 }
 
-
-
 int main ()
-{
-	BiThrTree T,Thrt;
+{//后序实现线索二叉树不方便设置头结点？（双向链表 
+	BiThrTree T;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
-	PostOrderThreading(T,Thrt);
-//	PostOrderTraverse_Thr(Thrt);cout<<endl;
+	PostThreading(T);
+	PostOrderTraverse_Thr(T);
 	return 0;
 }
