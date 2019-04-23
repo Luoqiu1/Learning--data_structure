@@ -204,15 +204,14 @@ int main ()
 	BiThrTree T,ThrtIn,ThrtPre,ThrtPost;
 	printf("层序创建二叉树，输入结点的值：\n");
 	CreateBiThrTree(T);
-//	printf("中序线索化二叉树，并输出二叉树：");
-//	InOrderThreading(T,ThrtIn);
-//	InOrderTraverse_Thr(ThrtIn);cout<<endl;
+	printf("中序线索化二叉树，并输出二叉树：");
+	InOrderThreading(T,ThrtIn);
+	InOrderTraverse_Thr(ThrtIn);cout<<endl;
 //	printf("前序线索化二叉树，并输出二叉树：");
 //	PreOrderThreading(T,ThrtPre);
 //	PreOrderTraverse_Thr(ThrtPre);cout<<endl;
-	printf("后序线索化二叉树，并输出二叉树：");
-	PostOrderThreading(T,ThrtPost);
-	PostOrderTraverse_Thr(ThrtPost);cout<<endl;
-	cout<<"here";
+//	printf("后序线索化二叉树，并输出二叉树：");
+//	PostOrderThreading(T,ThrtPost);
+//	PostOrderTraverse_Thr(ThrtPost);cout<<endl;
 	return 0; 
 }
