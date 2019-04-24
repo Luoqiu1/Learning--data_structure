@@ -100,10 +100,14 @@ Status HuffmanCoding(HuffmanTree &HT,HuffmanCode &HC,int *w,int n)
 		
 	//从根结点开始构建Huffman编码
 	
-	HC=(HuffmanCode)malloc((n+1)*sizeof(char *));
+//	cout<<"here1";
+	HC=(HuffmanCode)malloc((n+1)*sizeof(char*));
+//	cout<<"here2";
 	int p=m,cdlen=0;
 	for(i=1;i<=m;i++)HT[i].weight=0;
+//	cout<<"here3";
 	while(p){
+//		cout<<"here4";
 		if(HT[p].weight==0){
 			HT[p].weight=1;
 			if(HT[p].lchild!=0){
@@ -128,19 +132,15 @@ Status HuffmanCoding(HuffmanTree &HT,HuffmanCode &HC,int *w,int n)
 			p=HT[p].parent;cdlen--;
 		}
 	}
-	free(cd);
+//	cout<<"here5";
+	
+//	free(cd);    //这个算法中没有使用到数组指针！非法释放！ 
+	
 	printf("输出各结点的Huffman编码：\n");
+//	cout<<"here6";
 	for(i=1;i<=n;i++)
 	printf("%2d  %2d  %s\n",i,w[i-1],HC[i]);
-	
-	
-	
-	
-	
-	
-	
-	
-	
+//	cout<<"here7";
 }
 
 int main()
