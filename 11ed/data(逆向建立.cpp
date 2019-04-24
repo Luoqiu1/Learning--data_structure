@@ -81,66 +81,67 @@ Status HuffmanCoding(HuffmanTree &HT,HuffmanCode &HC,int *w,int n)
 	printf("\n");
 	//逆序构建Huffman编码 
 	
-//	HC=(HuffmanCode)malloc((n+1)*sizeof(char *));
-//	cd=(char*)malloc(n*sizeof(char));
-//	cd[n-1]='\0';
-//	for(i=1;i<=n;i++){
-//	//	cout<<"here";
-//		start=n-1;
-//		for(c=i,f=HT[i].parent;f!=0;c=f,f=HT[f].parent)
-//			if(HT[f].lchild==c)cd[--start]='0';
-//			else cd[--start]='1';
-//		HC[i]=(char*)malloc((n-start)*sizeof(char));
-//		strcpy(HC[i],&cd[start]);
-//	}
-//	free(cd);
-//	printf("输出各结点的Huffman编码：\n");
-//	for(i=1;i<=n;i++)
-//		printf("%2d  %2d  %s\n",i,w[i-1],HC[i]); 
+	HC=(HuffmanCode)malloc((n+1)*sizeof(char *));
+	cd=(char*)malloc(n*sizeof(char));
+	cd[n-1]='\0';
+	for(i=1;i<=n;i++){
+	//	cout<<"here";
+		start=n-1;
+		for(c=i,f=HT[i].parent;f!=0;c=f,f=HT[f].parent)
+			if(HT[f].lchild==c)cd[--start]='0';
+			else cd[--start]='1';
+		HC[i]=(char*)malloc((n-start)*sizeof(char));
+		strcpy(HC[i],&cd[start]);
+	}
+	free(cd);
+	printf("输出各结点的Huffman编码：\n");
+	for(i=1;i<=n;i++)
+		printf("%2d  %2d  %s\n",i,w[i-1],HC[i]); 
 		
 	//从根结点开始构建Huffman编码
-	
-//	cout<<"here1";
-	HC=(HuffmanCode)malloc((n+1)*sizeof(char*));
-//	cout<<"here2";
-	int p=m,cdlen=0;
-	for(i=1;i<=m;i++)HT[i].weight=0;
-//	cout<<"here3";
-	while(p){
-//		cout<<"here4";
-		if(HT[p].weight==0){
-			HT[p].weight=1;
-			if(HT[p].lchild!=0){
-				cd[cdlen++]='0';
-				p=HT[p].lchild;
-			}
-			else if(HT[p].rchild==0){
-				HC[p]=(char*)malloc(sizeof(char)*(cdlen+1));
-				cd[cdlen]='\0';
-				strcpy(HC[p],cd);
-			}
-		}
-		else if(HT[p].weight==1){
-			HT[p].weight=2;
-			if(HT[p].rchild!=0){
-				cd[cdlen++]='1';
-				p=HT[p].rchild;
-			}
-		}
-		else{
-			HT[p].weight=0; 
-			p=HT[p].parent;cdlen--;
-		}
-	}
-//	cout<<"here5";
-	
-//	free(cd);    //这个算法中没有使用到数组指针！非法释放！ 
-	
-	printf("输出各结点的Huffman编码：\n");
-//	cout<<"here6";
-	for(i=1;i<=n;i++)
-	printf("%2d  %2d  %s\n",i,w[i-1],HC[i]);
-//	cout<<"here7";
+//	
+////	cout<<"here1";
+//	HC=(HuffmanCode)malloc((n+1)*sizeof(char*));
+////	cout<<"here2";
+//	int p=m,cdlen=0;
+//	for(i=1;i<=m;i++)HT[i].weight=0;
+////	cout<<"here3";
+//	while(p){
+////		cout<<"here4";
+//		if(HT[p].weight==0){
+//			HT[p].weight=1;
+//			if(HT[p].lchild!=0){
+//				cd[cdlen++]='0';
+//				p=HT[p].lchild;
+//			}
+//			else if(HT[p].rchild==0){
+//				HC[p]=(char*)malloc(sizeof(char)*(cdlen+1));
+//				cd[cdlen]='\0';
+//				strcpy(HC[p],cd);
+//			}
+//		}
+//		else if(HT[p].weight==1){
+//			HT[p].weight=2;
+//			if(HT[p].rchild!=0){
+//				cd[cdlen++]='1';
+//				p=HT[p].rchild;
+//			}
+//		}
+//		else{
+//			HT[p].weight=0; 
+//			p=HT[p].parent;cdlen--;
+//		}
+//	}
+////	cout<<"here5";
+//	
+////	free(cd);    //这个算法中没有使用到数组指针！非法释放！ 
+//	
+//	printf("输出各结点的Huffman编码：\n");
+////	cout<<"here6";
+//	for(i=1;i<=n;i++)
+//	printf("%2d  %2d  %s\n",i,w[i-1],HC[i]);
+////	cout<<"here7";
+	return Ok;
 }
 
 int main()
@@ -151,14 +152,3 @@ int main()
 	HuffmanCoding(HT,HC,w,n);
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
