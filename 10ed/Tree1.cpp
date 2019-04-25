@@ -30,7 +30,10 @@ Status CreatCSTree(CSTree &T)
 
 Status CopyCSTree(CSTree T,CSTree T2)
 {
+//	cout<<"here2";
 	if(T->data=='#'){
+	//	T2->firstchild=nullptr;
+	//	T2->nextsibling=nullptr;
 		return Error;//kk
 	}
 	else{
@@ -44,20 +47,41 @@ Status CopyCSTree(CSTree T,CSTree T2)
 	return Ok;
 }
 
-//Status InitCSTree(CSTree &T)
-//{
-//	char ch;scanf("%c",&ch);
-//	if(ch!='#'){
-//		
-//	}
-//}
+Status DestroyTree(CSTree &T)
+{
+	if(!T)return Ok;
+	DestroyTree(T->firstchild);
+	DestroyTree(T->nextsibling);
+	free(T);
+	return Ok;
+}
 
+Status ClearTree(CSTree &T)
+{
+	if(!T)return Ok;
+	DestroyTree(T->firstchild);
+	DestroyTree(T->nextsibling);
+	T=nullptr;
+	return Ok;
+}
+
+void PreOrderCSTree(CSTree T)
+{
+	cout<<"here";
+	if(T){
+		cout<<T->data;
+		PreOrderCSTree(T->firstchild);
+		PreOrderCSTree(T->nextsibling);
+	}
+}
 
 int main ()
 {
 	CSTree T,T2;
 	CreatCSTree(T);
 	CopyCSTree(T,T2);
+	PreOrderCSTree(T);
+	return 0;
 }
 
 
