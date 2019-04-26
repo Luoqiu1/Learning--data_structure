@@ -12,7 +12,7 @@ typedef struct CSNode{
 	ElemType data;
 	CSNode *firstchild,*nextsibling;
 }CSNode,*CSTree;
-
+//CSTree *a;
 Status CreatCSTree(CSTree &T)
 {
 	char ch;scanf("%c",&ch);
@@ -28,9 +28,15 @@ Status CreatCSTree(CSTree &T)
 	return Ok;
 }
 
-Status CopyCSTree(CSTree T,CSTree T2)
+Status CopyCSTree(CSTree T,CSTree &T2)
 {
-	if(T->data=='#'){
+//	cout<<a<<' ';
+	if(!T){//  ！！！吃亏了 总算是意识到了 非法访问 会带来的严重后果！
+								//之一 就是，无论怎么调试程序都感觉没问题！
+							//在利用指针访问结点的时候，一定要注意，在这个过程中
+							//会不会产生非法访问！！（虽然本意不会，但在循环或者递归的
+							//过程中会不经意出现！所以一定要在每次访问某个结点前先检查其是否为空（合法）！
+										 
 	//	T2->firstchild=nullptr;
 	//	T2->nextsibling=nullptr;
 		return Error;//kk
@@ -86,8 +92,15 @@ void PostOrderCSTree(CSTree T)
 int main ()
 {
 	CSTree T,T2;
+//	a=&T;
 	CreatCSTree(T);
-//	CopyCSTree(T,T2);
+	CopyCSTree(T,T2);
+	DestroyTree(T); 
+	PreOrderCSTree(T2);
+	cout<<endl;
+	PostOrderCSTree(T2);
+	cout<<endl;
+	CopyCSTree(T2,T);
 	PreOrderCSTree(T);
 	cout<<endl;
 	PostOrderCSTree(T);
