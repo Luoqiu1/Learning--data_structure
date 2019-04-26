@@ -38,8 +38,9 @@ int Depth(CSTree T)
 	{
 		dc=Depth(T->firstchild);
 		ds=Depth(T->nextsibling);
-		d=dc+1>+ds?dc+1:ds;
-	 } 
+		d=dc+1>ds?dc+1:ds;
+	//	if(dc>ds)d=dc+1;else d=ds+1;
+	 }
 	return d; 
 }
 void InOrderTraverse1(CSTree T) { 

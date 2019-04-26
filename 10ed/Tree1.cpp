@@ -105,20 +105,27 @@ void PreOrderCSTree(CSTree T)
 	}
 }
 
-void Depth(CSTree T)
+int Depth(CSTree T)
 {
-	if(!T)pre=T;
-	if(T){
-		if(pre&&pre==T->firstchild)curDepth++;	
-		pre=T;
-		Depth(T->firstchild);
-		pre=T;
-		Depth(T->nextsibling);
-		pre=T;
-		if(!T->firstchild&&!T->nextsibling){
-			if(curDepth>maxDepth)maxDepth=curDepth;
-			curDepth--;
-		}
+//	if(!T)pre=T;
+//	if(T){
+//		if(pre&&pre==T->firstchild)curDepth++;	
+//		pre=T;
+//		Depth(T->firstchild);
+//		pre=T;
+//		Depth(T->nextsibling);
+//		pre=T;
+//		if(!T->firstchild&&!T->nextsibling){
+//			if(curDepth>maxDepth)maxDepth=curDepth;
+//			curDepth--;
+//		}
+//	}
+	int h1,h2;
+	if(!T)return 0;
+	else{
+		h1=Depth(T->firstchild);
+		h2=Depth(T->nextsibling);
+		return h1+1>h2?h1+1:h2;
 	}
 }
 
@@ -141,7 +148,7 @@ int main ()
 	cout<<endl;
 	CountTree(T);
 	cout<<LeafCount<<endl;
-	Depth(T);
+	maxDepth=Depth(T);
 	cout<<maxDepth<<endl;
 	return 0;
 }
