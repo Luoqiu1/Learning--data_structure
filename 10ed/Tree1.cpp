@@ -13,6 +13,9 @@ typedef struct CSNode{
 	CSNode *firstchild,*nextsibling;
 }CSNode,*CSTree;
 //CSTree *a;
+int LeafCount;
+int curDepth,maxDepth;
+CSTree pre;
 Status CreatCSTree(CSTree &T)
 {
 	char ch;scanf("%c",&ch);
@@ -70,13 +73,17 @@ Status ClearTree(CSTree &T)
 	return Ok;
 }
 
-void PreOrderCSTree(CSTree T)
+void CountTree(CSTree T)
 {
 //	cout<<"here";
 	if(T){
-		cout<<T->data;
-		PreOrderCSTree(T->firstchild);
-		PreOrderCSTree(T->nextsibling);
+	//	if(!T->firstchild&&!T->nextsibling)LeafCount++;
+												//这里的叶子指的是
+												//还未转换为孩子兄弟树（二叉树）时的叶子
+												//即原来 树 的叶子！ 
+		if(!T->firstchild)LeafCount++;
+		CountTree(T->firstchild);
+		CountTree(T->nextsibling);
 	}
 }
 
@@ -87,7 +94,33 @@ void PostOrderCSTree(CSTree T)
 		cout<<T->data;
 		PostOrderCSTree(T->nextsibling);
 	}
- } 
+}
+
+void PreOrderCSTree(CSTree T)
+{
+	if(T){
+		cout<<T->data;
+		PreOrderCSTree(T->firstchild);
+		PreOrderCSTree(T->nextsibling);
+	}
+}
+
+void Depth(CSTree T)
+{
+	if(!T)pre=T;
+	if(T){
+		if(pre&&pre==T->firstchild)curDepth++;	
+		pre=T;
+		Depth(T->firstchild);
+		pre=T;
+		Depth(T->nextsibling);
+		pre=T;
+		if(!T->firstchild&&!T->nextsibling){
+			if(curDepth>maxDepth)maxDepth=curDepth;
+			curDepth--;
+		}
+	}
+}
 
 int main ()
 {
@@ -101,17 +134,23 @@ int main ()
 	PostOrderCSTree(T2);
 	cout<<endl;
 	CopyCSTree(T2,T);
+	ClearTree(T2);
 	PreOrderCSTree(T);
 	cout<<endl;
 	PostOrderCSTree(T);
 	cout<<endl;
+	CountTree(T);
+	cout<<LeafCount<<endl;
+	Depth(T);
+	cout<<maxDepth<<endl;
 	return 0;
 }
 
 
 
 // RAD#E##B#CFG#####
-
+// RAD#EB#CFG#H#K#####]
+// RAD#E##B#CFG#H#K#####
 
 
 
