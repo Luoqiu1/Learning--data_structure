@@ -125,7 +125,8 @@ int Depth(CSTree T)
 	else{
 		h1=Depth(T->firstchild);
 		h2=Depth(T->nextsibling);
-		return h1+1>h2?h1+1:h2;
+		return h1+1>h2?h1+1:h2;//太巧妙了！保证大的永远是左子树！即 孩子！
+								//保证了永远返回的是大的且是深度！ 
 	}
 }
 
@@ -133,22 +134,32 @@ int main ()
 {
 	CSTree T,T2;
 //	a=&T;
+	printf("前根建立树T，请输入结点的值：\n"); 
 	CreatCSTree(T);
+	printf("复制树T至T2，并销毁T\n");
 	CopyCSTree(T,T2);
 	DestroyTree(T); 
+	printf("前根遍历树T2：\n");
 	PreOrderCSTree(T2);
 	cout<<endl;
+	printf("后根遍历树T2：\n");
 	PostOrderCSTree(T2);
 	cout<<endl;
+	printf("复制树T2至T，并清空T2\n");
 	CopyCSTree(T2,T);
 	ClearTree(T2);
+	printf("复制成功！清空树T2成功！\n");
+	printf("前根遍历树T：\n");
 	PreOrderCSTree(T);
 	cout<<endl;
+	printf("前根遍历树T：\n");
 	PostOrderCSTree(T);
 	cout<<endl;
+	printf("求树T的叶子个数：");
 	CountTree(T);
 	cout<<LeafCount<<endl;
 	maxDepth=Depth(T);
+	printf("求树T的深度："); 
 	cout<<maxDepth<<endl;
 	return 0;
 }
