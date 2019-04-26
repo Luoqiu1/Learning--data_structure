@@ -30,7 +30,6 @@ Status CreatCSTree(CSTree &T)
 
 Status CopyCSTree(CSTree T,CSTree T2)
 {
-//	cout<<"here2";
 	if(T->data=='#'){
 	//	T2->firstchild=nullptr;
 	//	T2->nextsibling=nullptr;
@@ -67,7 +66,7 @@ Status ClearTree(CSTree &T)
 
 void PreOrderCSTree(CSTree T)
 {
-	cout<<"here";
+//	cout<<"here";
 	if(T){
 		cout<<T->data;
 		PreOrderCSTree(T->firstchild);
@@ -75,24 +74,30 @@ void PreOrderCSTree(CSTree T)
 	}
 }
 
+void PostOrderCSTree(CSTree T)
+{
+	if(T){
+		PostOrderCSTree(T->firstchild);
+		cout<<T->data;
+		PostOrderCSTree(T->nextsibling);
+	}
+ } 
+
 int main ()
 {
 	CSTree T,T2;
 	CreatCSTree(T);
-	CopyCSTree(T,T2);
+//	CopyCSTree(T,T2);
 	PreOrderCSTree(T);
+	cout<<endl;
+	PostOrderCSTree(T);
+	cout<<endl;
 	return 0;
 }
 
 
 
-
-
-
-
-
-
-
+// RAD#E##B#CFG#####
 
 
 
