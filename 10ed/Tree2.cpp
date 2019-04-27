@@ -105,18 +105,18 @@ Status CreatCSTree(CSTree &T)
 	} //上一段是构建根结点的左子树
 	//下一段先特判有无右子树，有再ctrl+c v 代码即可。 
 	bool rightTree=true;
-	if(p==T&&StackEmpty(S)){ //！！！干脆特判！ 对根节点是否有右子树特判
+	if(StackEmpty(S)){ //！！！干脆特判！ 对根节点是否有右子树特判
 								//第二次访问根节点的时候，栈是空的！
 								//设置该条件便避免了第一次刚进入根结点进行创建的情况！ 
-			if(scanf("%c",&ch)&&ch!='#'){
+			if(scanf("%c",&ch)&&ch!='#'||ch==13){
 				CSTree cur=(CSNode*)malloc(sizeof(CSNode));
 				cur->data=ch;cur->firstchild=nullptr;cur->nextsibling=nullptr;
 				Push(S,cur);
 				T->nextsibling=cur;
 				p=cur;
 			}
-			else rightTree=false;//如果无右子树，打破循环。 
-		}
+			else rightTree=false;//如果无右子树，打破。 
+	}
 	while(rightTree&&!StackEmpty(S)){
 		while(scanf("%c",&ch)&&ch!='#'){
 			CSTree cur=(CSNode*)malloc(sizeof(CSNode));
