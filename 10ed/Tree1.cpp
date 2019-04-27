@@ -167,7 +167,7 @@ int main ()
 
 
 // RAD#E##B#CFG#####
-// RAD#EB#CFG#H#K#####]
+// RAD#EB#CFG#H#K#######
 // RAD#E##B#CFG#H#K#####
 
 
