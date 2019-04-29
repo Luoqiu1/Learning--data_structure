@@ -140,11 +140,27 @@ Status CreatCSTree(CSTree &T)
 	}
 }
 
+Status PreOrderCSTree(CSTree T)
+{
+	SqStack S;InitStack(S);
+	while(T||!StackEmpty(S)){
+		while(T){
+			cout<<T->data;Push(S,T);
+			T=T->firstchild;
+		}
+		if(!StackEmpty(S)){
+			Pop(S,T);
+			T=T->nextsibling;
+		}
+	}
+	return Ok;
+ } 
 
 int main()
 {
 	CSTree T;
 	CreatCSTree(T);
+	PreOrderCSTree(T);cout<<endl;
 	return 0;
 }
 
