@@ -154,13 +154,29 @@ Status PreOrderCSTree(CSTree T)
 		}
 	}
 	return Ok;
- } 
+ }
+ 
+Status PostOrderCSTree(CSTree T)
+{
+	SqStack S;InitStack(S);
+	while(T||!StackEmpty(S)){
+		while(T){
+			Push(S,T);T=T->firstchild;
+		}
+		if(!StackEmpty(S)){
+			Pop(S,T);cout<<T->data;
+			T=T->nextsibling;
+		}
+	}
+	return Ok;
+}
 
 int main()
 {
 	CSTree T;
 	CreatCSTree(T);
 	PreOrderCSTree(T);cout<<endl;
+	PostOrderCSTree(T);cout<<endl;
 	return 0;
 }
 
