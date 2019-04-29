@@ -265,6 +265,31 @@ Status PostOrderCSTree(CSTree T)
 //	}
 //}
 
+int DepthCSTree(CSTree T)
+{
+	SqStack S;InitStack(S);
+	int Depth=0,maxDepth=0;
+	CSTree pre=T;
+	while(T||!StackEmpty(S)){
+		while(T){
+			Push(S,T);
+			pre=T;
+			T=T->firstchild;
+			Depth++;
+		//	if(T)pre=T;
+		}
+		if(maxDepth<Depth)maxDepth=Depth;
+		if(!StackEmpty(S)){
+			Pop(S,T);
+		//	if(maxDepth<Depth)maxDepth=Depth;
+			if(T->nextsibling!=pre)Depth--;//是否要减深度只需要判断上一个访问的结点
+											//与当前Pop出来的结点是否为兄弟关系！ 
+			T=T->nextsibling;
+		}
+	}
+	return maxDepth;
+}
+
 int main()
 {
 	CSTree T;
@@ -274,6 +299,8 @@ int main()
 	PreOrderCSTree(T);cout<<endl;
 	printf("后根遍历树：");
 	PostOrderCSTree(T);cout<<endl;
+	printf("输出树的深度：%d",DepthCSTree(T));
+	cout<<endl;
 	return 0;
 }
 

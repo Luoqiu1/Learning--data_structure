@@ -502,7 +502,7 @@ int main ()
 	printf("输出树的层序遍历结果：\n");
 	LevelOrderTraverse(T);
 	cout<<endl;
-	printf("求树的深度，其深度为：%d\n",DeepLinkBiTree(T));
+//	printf("求树的深度，其深度为：%d\n",DeepLinkBiTree(T));
 	printf("求树的叶子结点数，其叶子结点数为：%d\n",LeafLinkBiTree(T));
 //	printf("交换树的左右子树。\n");
 //	ExchangeLinkBiTree(T);
