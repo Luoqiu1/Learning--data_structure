@@ -68,8 +68,8 @@ Status GetHead(LinkQueue Q,QElemType &e)
 
 Status DeQueue(LinkQueue &Q,QElemType &e)
 {
-	Queueptr q;
 	if(Q.front==Q.rear)return Error;
+	Queueptr q;
 	q=Q.front->next;
 	Q.front->next=q->next;
 	e=q->data;

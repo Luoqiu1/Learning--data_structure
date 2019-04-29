@@ -480,7 +480,7 @@ Status ExchangeLinkBiTree(LinkBiTree &T)
 
 int main ()
 {
-	printf("请输入树："); 
+	printf("层序构造树，请输入树的结点值："); 
 	LinkBiTree T; 
 	InitBiTree(T);
 //	int cnt=0;
@@ -490,33 +490,33 @@ int main ()
 //		T=T->lchild; 
 //		cout<<cnt<<endl;
 //	}
-	printf("输出树的先序遍历结果：\n");
-	PreOrderTraverse(T);
-	cout<<endl;
-	printf("输出树的中序遍历结果：\n");
-	InOrderTraverse(T);
-	cout<<endl;
-	printf("输出树的后序遍历结果：\n");
-	PostOrderTraverse(T);
-	cout<<endl;
+//	printf("输出树的先序遍历结果：\n");
+//	PreOrderTraverse(T);
+//	cout<<endl;
+//	printf("输出树的中序遍历结果：\n");
+//	InOrderTraverse(T);
+//	cout<<endl;
+//	printf("输出树的后序遍历结果：\n");
+//	PostOrderTraverse(T);
+//	cout<<endl;
 	printf("输出树的层序遍历结果：\n");
 	LevelOrderTraverse(T);
 	cout<<endl;
 	printf("求树的深度，其深度为：%d\n",DeepLinkBiTree(T));
 	printf("求树的叶子结点数，其叶子结点数为：%d\n",LeafLinkBiTree(T));
-	printf("交换树的左右子树。\n");
-	ExchangeLinkBiTree(T);
-	printf("输出子树交换后的树的先序遍历结果：\n");
-	PreOrderTraverse(T);
-	cout<<endl;
-	printf("输出子树交换后的中序遍历结果：\n");
-	InOrderTraverse(T);
-	cout<<endl;
-	printf("输出子树交换后的后序遍历结果：\n");
-	PostOrderTraverse(T);
-	cout<<endl;
-	printf("输出子树交换后的层序遍历结果：\n");
-	LevelOrderTraverse(T);
-	cout<<endl;
+//	printf("交换树的左右子树。\n");
+//	ExchangeLinkBiTree(T);
+//	printf("输出子树交换后的树的先序遍历结果：\n");
+//	PreOrderTraverse(T);
+//	cout<<endl;
+//	printf("输出子树交换后的中序遍历结果：\n");
+//	InOrderTraverse(T);
+//	cout<<endl;
+//	printf("输出子树交换后的后序遍历结果：\n");
+//	PostOrderTraverse(T);
+//	cout<<endl;
+//	printf("输出子树交换后的层序遍历结果：\n");
+//	LevelOrderTraverse(T);
+//	cout<<endl;
 	return Ok;
  }
