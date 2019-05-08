@@ -1,19 +1,16 @@
 #include <iostream>
 using namespace std;
-typedef enum{DG,DN,UDG,UDN} GraphKind; 
-typedef struct ArcCell{
+typedef struct AdjCell{
 	VRType adj;
 	InfoType *info;
-}ArcCell,AdjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+}AdjCell,AdjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
 typedef struct {
+	GraphKind kind;
 	VertexType vexs[MAX_VERTEX_NUM];
 	AdjMatrix arcs;
 	int vexnum,arcnum;
-	GraphKind kind;
 }MGraph;
-
-
 int main ()
 {
-	return 0;
+	
 }
