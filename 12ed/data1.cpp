@@ -1,9 +1,11 @@
 #include <iostream>
+#include <cstdio>
 using namespace std;
 #define Ok 1
 #define Error 0
 #define Overflow -2
 #define True 1
+#define INFINITY 0x3f3f3f3f
 #define MAX_VERTEX_NUM 20 
 typedef int Status;
 typedef char VertexType;
@@ -18,7 +20,7 @@ typedef struct AdjCell{
 	InfoType *info;
 }AdjCell,AdjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];//理解结构体的结构！为什么是这样！ 
 
-typedef struct { 
+typedef struct {
 	AdjMatrix arcs;//数组邻接表的具体值直接表示是否存在这个弧！
 					//其数组的一 二维下标则已代表了 弧v1 v2！是有向的！
 									//无向图的话对称来，另[v2][v1]=[v1][v2]即可 
@@ -39,6 +41,38 @@ int LocateVex(MGraph G,char v)//定位顶点的位置！
 	}
 	return -1;//未找到符合条件的顶点！ 
 }
+
+Status CreateUDN(MGraph &G)
+{
+	int i,j,k,w;
+	VertexType v1,v2;
+	printf("输入顶点数 G.vexnum: ");scanf("%d",&G.vexnum);
+	printf("输入边数 G.arcnum: ");scanf("%d",&G.arcnum);
+	getchar();//吸收缓冲区的回车
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点G.vexs[%d]: ",i);
+		scanf("%c",&G.vexs[i]);getchar();
+	}
+	for(i=0;i<G.vexnum;++i){
+		for(j=0;j<G.vexnum;++j){
+			G.arcs[i][j].adj=INFINITY;
+			G.arcs[i][j].info=nullptr;
+		}
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("输入第 %d 条边的顶点 vi、vj 以及权值 w (int):\n",k+1);
+		scanf("%c %c %d",&v1,&v2,&w);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		G.arcs[i][j].adj=G.arcs[j][i].adj=w;//无向网 
+		//if(Inclnfo)scanf(G.arcs[i][j].info)//输入弧含有的相关信息 
+	}
+	return Ok; 
+}
+
+
+
+
+
 int main ()
 {
 	return 0;
