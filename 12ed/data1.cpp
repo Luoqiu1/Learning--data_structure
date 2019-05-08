@@ -69,11 +69,45 @@ Status CreateUDN(MGraph &G)
 	return Ok; 
 }
 
+Status CreateGraph(MGraph &G)
+{
+	//采用数组（邻接矩阵）表示法，构造图G
+	printf("请输入图的种类: 0 表示 DG, 1 表示 DN, 2 表示 UDG , 3 表示 UDN\n");
+	scanf("%d",&G.kind);
+	switch(G.kind){
+	//	case DG:return CreateDG(G);
+	//	case DN:return CreateDN(G);
+	//	case UDG:return CreateUDG(G);
+		case UDN:return CreateUDN(G);
+	}
+	return Ok;
+}
 
-
-
+void list(MGraph G)
+{
+	int i,j;
+	printf("输出邻接矩阵：\n\n");
+	printf(" ----");
+	for(i=0;i<G.vexnum;++i){
+		printf("%4c",G.vexs[i]);
+	}
+	printf("\n");
+	for(i=0;i<G.vexnum;++i){
+		printf("%c----",G.vexs[i]);
+		for(j=0;j<G.vexnum;++j){
+			if(G.arcs[i][j].adj==INFINITY)
+				printf("%4s","∞");
+			else
+				printf("%4d",G.arcs[i][j].adj);
+		}
+		printf("\n");
+	}
+}
 
 int main ()
 {
+	MGraph G;
+	CreateGraph(G);
+	list(G);
 	return 0;
  } 
