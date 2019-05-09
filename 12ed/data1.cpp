@@ -99,6 +99,35 @@ Status CreateDG(MGraph &G)
 	return Ok;
 }
 
+Status CreateUDG(MGraph &G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	printf("输入顶点数 G.vexnum：");scanf("%d",&G.vexnum);
+	printf("输入边数 G.arcnum：");scanf("%d",&G.arcnum);
+	//怎么刚说这里 又错了！。。。。
+//
+	getchar(); 
+	//仔细啊啊啊啊啊啊！！ 
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点 G.vexs[%d]：",i);
+		scanf("%c",&G.vexs[i]);getchar();
+	}
+	for(i=0;i<G.vexnum;++i){
+		for(j=0;j<G.vexnum;++j){
+			G.arcs[i][j].adj=0;
+			G.arcs[i][j].info=nullptr;
+		}
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("输入第 %d 条边的顶点 v1、v2：\n",k+1);
+		scanf("%c %c",&v1,&v2);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		G.arcs[i][j].adj=G.arcs[j][i].adj=1;
+	}
+	return Ok;
+}
+
 Status CreateDN(MGraph &G)
 {
 	int i,j,k,w;
@@ -139,7 +168,7 @@ Status CreateGraph(MGraph &G)
 	switch(G.kind){
 		case DG:return CreateDG(G);
 		case DN:return CreateDN(G);
-	//	case UDG:return CreateUDG(G);
+		case UDG:return CreateUDG(G);
 		case UDN:return CreateUDN(G);
 	}
 	return Ok;
