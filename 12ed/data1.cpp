@@ -69,14 +69,69 @@ Status CreateUDN(MGraph &G)
 	return Ok; 
 }
 
+Status CreateDG(MGraph &G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	printf("输入顶点数 G.vexnum: ");scanf("%d",&G.vexnum);
+	printf("输入弧数 G.arcnum: ");scanf("%d",&G.arcnum);
+	getchar();//吸收缓冲区的回车
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点G.vexs[%d]：",i);
+		scanf("%c",&G.vexs[i]);getchar();
+	}
+	for(i=0;i<G.vexnum;++i){
+		for(j=0;j<G.vexnum;++j){
+		//	G.arcs[i][j]=0; 仔细！arcs是什么数据结构！
+					//arcs[i][j]还只是指向了某一个大的结构体
+					//还没有具体指向结构体中的哪一个细分结构！
+			G.arcs[i][j].adj=0;
+			G.arcs[i][j].info=nullptr;			 
+		}
+	}
+	for(k=0;k<G.arcnum;++k){
+	//	printf("输入弧尾v1，弧头v2：",);scanf("%c %c",&v1,&v2);
+		printf("输入第 %d 条弧的弧尾 vi，弧头vj ：\n",k+1);
+		scanf("%c %c",&v1,&v2);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		G.arcs[i][j].adj=1;//有向图 
+	}
+	return Ok;
+}
+
+Status CreateDN(MGraph &G)
+{
+	int i,j,k,w;
+	VertexType v1,v2;
+	printf("输入顶点个数G.vexnum ：\n");scanf("%d",&G.vexnum);
+	printf("输入弧个数G.arcnum ：\n");scanf("%d",&G.vexnum);
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点G.vexs[%d]：",i);
+		scanf("%c",&G.vexs[i]);getchar();
+	}
+	for(i=0;i<G.vexnum;++i){
+		for(j=0;j<G.vexnum;++j){
+			G.arcs[i][j].adj=0;
+			G.arcs[i][j].info=nullptr;
+		}
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("输入第 %d 条弧的 弧尾v1，弧头v2以及权值 w(int)：\n",k+1);
+		scanf("%c %c %d",&v1,&v2,w);
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		G.arcs[i][j].adj=w;
+	}
+	return Ok;
+}
+
 Status CreateGraph(MGraph &G)
 {
 	//采用数组（邻接矩阵）表示法，构造图G
 	printf("请输入图的种类: 0 表示 DG, 1 表示 DN, 2 表示 UDG , 3 表示 UDN\n");
 	scanf("%d",&G.kind);
 	switch(G.kind){
-	//	case DG:return CreateDG(G);
-	//	case DN:return CreateDN(G);
+		case DG:return CreateDG(G);
+		case DN:return CreateDN(G);
 	//	case UDG:return CreateUDG(G);
 		case UDN:return CreateUDN(G);
 	}
