@@ -103,21 +103,28 @@ Status CreateDN(MGraph &G)
 {
 	int i,j,k,w;
 	VertexType v1,v2;
-	printf("输入顶点个数G.vexnum ：\n");scanf("%d",&G.vexnum);
-	printf("输入弧个数G.arcnum ：\n");scanf("%d",&G.vexnum);
+	printf("输入顶点个数 G.vexnum：");scanf("%d",&G.vexnum);
+	printf("输入弧个数 G.arcnum：");scanf("%d",&G.arcnum);
+	///////
+//	这里一定要仔细！！！ 
+	///////
+//	上一个数据输入的是%d 而下一个数据输入的是%c ！
+//	中间一定要有将缓冲区的回车符刷新掉（吸收掉）的操作！ 
+	getchar();
+	///////
 	for(i=0;i<G.vexnum;++i){
 		printf("输入顶点G.vexs[%d]：",i);
 		scanf("%c",&G.vexs[i]);getchar();
 	}
 	for(i=0;i<G.vexnum;++i){
 		for(j=0;j<G.vexnum;++j){
-			G.arcs[i][j].adj=0;
+			G.arcs[i][j].adj=INFINITY;
 			G.arcs[i][j].info=nullptr;
 		}
 	}
 	for(k=0;k<G.arcnum;++k){
-		printf("输入第 %d 条弧的 弧尾v1，弧头v2以及权值 w(int)：\n",k+1);
-		scanf("%c %c %d",&v1,&v2,w);
+		printf("输入第 %d 条弧的弧尾 vi，弧头vj 以及权值 w (int)：\n",k+1);
+		scanf("%c %c %d",&v1,&v2,&w);getchar(); 
 		i=LocateVex(G,v1);j=LocateVex(G,v2);
 		G.arcs[i][j].adj=w;
 	}
