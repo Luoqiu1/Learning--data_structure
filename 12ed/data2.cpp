@@ -149,14 +149,36 @@ Status CreateDN(ALGraph &G)
 	return Ok;
 }
 
-
+Status CreateDG(ALGraph &G)
+{
+	int i,j,k;
+	VertexType v1,v2;
+	ArcNode *pi,*pj;
+	printf("输入顶点数 G.vexnum：");scanf("%d",&G.vexnum);
+	printf("输入弧数 G.arcnum：");scanf("%d",&G.arcnum);
+	getchar();
+	for(i=0;i<G.vexnum;++i){
+		G.vertices[i].firstarc=nullptr;
+		printf("输入顶点 G.vertices[%d].data：",i);scanf("%c",&G.vertices[i].data);getchar();
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("请输入第 %d 条弧的弧尾v1、弧头v2：\n",k+1);
+		scanf("%c %c",&v1,&v2);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		if(!(pi=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
+		pi->info=nullptr;
+		pi->nextarc=G.vertices[i].firstarc;pi->adjvex=j;
+		G.vertices[i].firstarc=pi;
+	}
+	return Ok;
+}
 
 Status CreateGraph(ALGraph &G)
 {
 	printf("请输入图的种类：0 表示 DG，1 表示 DN，2 表示 UDG，3 表示 UDN\n");
 	scanf("%d",&G.kind);
 	switch(G.kind){
-	//	case DG:return CreateDG(G);
+		case DG:return CreateDG(G);
 		case DN:return CreateDN(G);
 		case UDG:return CreateUDG(G);
 		case UDN:return CreateUDN(G);
