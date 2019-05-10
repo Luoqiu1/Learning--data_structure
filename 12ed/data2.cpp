@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 using namespace std;
 #define INFINITY 0x3f3f3f3f
 #define Ok 1
@@ -35,7 +36,95 @@ typedef struct ALGraph{
 	int vexnum,arcnum;
 }ALGraph;
 
-		//算法一 
+typedef int QElemType;
+typedef struct QNode{
+	QElemType data;
+	struct QNode *next;
+}QNode,*Queueptr;
+typedef struct LinkQueue{
+	Queueptr front,rear;
+}LinkQueue;
+int QueueLength(LinkQueue Q)
+{
+	int Length=0;
+	Queueptr q;
+	q=Q.front;
+	while(q!=Q.rear){
+		Length++;q=q->next;
+	}
+	return Length;
+}
+Status InitQueue(LinkQueue &Q)
+{
+	Q.front=Q.rear=(QNode*)malloc(sizeof(QNode));
+	if(!Q.front)exit(Overflow);
+	Q.front->next=nullptr;
+	return Ok; 
+}
+
+Status QueueEmpty(LinkQueue Q)
+{
+	if(Q.front==Q.rear)return Ok;
+	return !Ok;
+}
+
+Status GetHead(LinkQueue Q,QElemType &e)
+{
+	if(Q.front==Q.rear)return Error;
+	e=Q.front->next->data;//队列采取同线性表的单链表一样，为操作方便起见，
+							//给链队列也添加一个头结点 Q.front ! 
+	return Ok;
+}
+
+Status DeQueue(LinkQueue &Q,QElemType &e)
+{
+	if(Q.front==Q.rear)return Error;
+	Queueptr q;
+	q=Q.front->next;
+	Q.front->next=q->next;
+	e=q->data;
+	if(Q.rear==q)Q.rear=Q.front;
+	free(q);
+	return Ok; 
+}
+
+Status EnQueue(LinkQueue &Q,QElemType e)
+{
+	Q.rear->next=(QNode*)malloc(sizeof(QNode));
+	if(!(Q.front->next))exit(Overflow);
+	Q.rear->next->data=e;
+	Q.rear->next->next=nullptr;
+	Q.rear=Q.rear->next;
+	return Ok;
+}
+
+void BFS(ALGraph G,int v)
+{
+	LinkQueue Q;InitQueue(Q);
+	EnQueue(Q,v);visited[v]=true;
+	while(!QueueEmpty(Q)){
+		DeQueue(Q,v);printf("%c",G.vertices[v].data);
+		ArcNode *p=G.vertices[v].firstarc;
+		while(p){
+			if(!visited[p->adjvex]){
+				EnQueue(Q,p->adjvex);visited[p->adjvex]=true;
+			}
+			p=p->nextarc;
+		}
+	}
+}
+
+void BFSTraverse(ALGraph G)
+{
+	int v;
+	memset(visited,0,sizeof(visited));
+	for(v=0;v<G.vexnum;++v){
+		if(!visited[v])BFS(G,v);
+	}
+} 
+
+
+		//深搜算法一 
 
 int NextAdjVex(ALGraph G,int v,int w)
 {
@@ -84,13 +173,14 @@ void DFS(ALGraph G,int v)
 void DFSTraverse(ALGraph G)
 {
 	int v;
+	memset(visited,0,sizeof(visited));
 	for(v=0;v<G.vexnum;++v){
 //		printf("DFSTraverse v=%d\n",v);
 		if(!visited[v]) DFS(G,v);
 	}
 }
 
-		//算法二： 
+		//深搜算法二： 
 
 //void DFS(ALGraph G,int v)
 //{
@@ -108,6 +198,7 @@ void DFSTraverse(ALGraph G)
 //void DFSTraverse(ALGraph G)
 //{
 //	int v;
+//	memset(visited,0,sizeof(visited));
 //	for(v=0;v<G.vexnum;++v){
 //		if(!visited[v])DFS(G,v);
 //	}
@@ -294,9 +385,13 @@ int main ()
 	ALGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("\n输出深度优先遍历图的结果：");
+	printf("\n");
+	printf("输出深度优先遍历图的结果：");
 	DFSTraverse(G);
 	printf("\n");
+	printf("输出广度优先遍历图的结果：");
+	BFSTraverse(G);
+	printf("\n"); 
 	return 0;
 }
 
