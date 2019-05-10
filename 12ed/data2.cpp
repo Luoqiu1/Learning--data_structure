@@ -1,5 +1,7 @@
-#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstdlib>
 using namespace std;
+#define INFINITY 0x3f3f3f3f
 #define Ok 1
 #define Error 0
 #define Overflow -2
@@ -54,9 +56,9 @@ Status CreateUDG(ALGraph &G)//无向图
 	getchar(); 
 	for(i=0;i<G.vexnum;++i){
 		G.vertices[i].firstarc=nullptr;
-		printf("输入顶点 G.vertices[%d].data",i);
-		scanf("%c",G.vertices[i].data);getchar();
-	}
+		printf("输入顶点 G.vertices[%d].data：",i);
+		scanf("%c",&G.vertices[i].data);getchar();
+	} 
 	for(k=0;k<G.arcnum;++k){
 		printf("请输入第 %d 条边的顶点 v1、v2：\n",k+1);
 	//	scanf("%c %c",(*pi).data,(*pj).data);
@@ -84,8 +86,58 @@ Status CreateUDG(ALGraph &G)//无向图
 	return Ok; 
 }
 
+Status CreateGraph(ALGraph &G)
+{
+	printf("请输入图的种类：0 表示 DG，1 表示 DN，2 表示 UDG，3 表示 UDN\n");
+	scanf("%d",&G.kind);
+	switch(G.kind){
+	//	case DG:return CreateDG(G);
+	//	case DN:return CreateDN(G);
+		case UDG:return CreateUDG(G);
+	//	case UDN:return CreateUDN(G);
+		default:return Error;
+	}
+	return Ok; 
+}
+
+void list(ALGraph G)
+{
+//	int i,j;
+	int i;
+	ArcNode *p;
+	printf("输出邻接表：\n\n");
+//	printf(" ----");
+//	for(i=0;i<G.vexnum;++i){
+//		printf("%4c",G.vertices[i].data);
+//	}
+//	printf("\n");
+//	for(i=0;i<G.vexnum;++i){
+//		printf("%c----".G.vertices[i].data);
+//		p=G.vertices[i].firstarc;
+//		
+//		for(j=0;j<G.vexnum;++j){
+//			while(p)
+//		}
+//	}
+	for(i=0;i<G.vexnum;++i){
+		printf("%d: %c--->",i,G.vertices[i].data);
+		p=G.vertices[i].firstarc;
+		while(p){
+			printf("%3d",p->adjvex);
+			p=p->nextarc;
+			if(p){
+				printf(" --->");
+			}
+		}
+		printf("\n");
+	}
+}
+
 int main ()
 {
+	ALGraph G;
+	CreateGraph(G);
+	list(G);
 	return 0;
 }
 
