@@ -35,6 +35,8 @@ typedef struct ALGraph{
 	int vexnum,arcnum;
 }ALGraph;
 
+		//算法一 
+
 int NextAdjVex(ALGraph G,int v,int w)
 {
 //	printf("NAdj前 v=%d\n",v);
@@ -88,6 +90,8 @@ void DFSTraverse(ALGraph G)
 	}
 }
 
+		//算法二： 
+
 //void DFS(ALGraph G,int v)
 //{
 //	printf("%c",G.vertices[v].data);
@@ -97,14 +101,14 @@ void DFSTraverse(ALGraph G)
 //		if(!visited[p->adjvex]){
 //			DFS(G,p->adjvex);
 //		}
-//		
+//		p=p->nextarc; 
 //	}
 //}
 //
 //void DFSTraverse(ALGraph G)
 //{
 //	int v;
-//	for(v=0;v<G.vexnum;++V){
+//	for(v=0;v<G.vexnum;++v){
 //		if(!visited[v])DFS(G,v);
 //	}
 //}
@@ -290,7 +294,9 @@ int main ()
 	ALGraph G;
 	CreateGraph(G);
 	list(G);
+	printf("\n输出深度优先遍历图的结果：");
 	DFSTraverse(G);
+	printf("\n");
 	return 0;
 }
 
