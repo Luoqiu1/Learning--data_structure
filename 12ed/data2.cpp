@@ -18,7 +18,6 @@ typedef struct ArcNode{
 	//还是忘记了，邻接表的特征啊！是在同一个顶点下的邻接的弧的集合！
 	//通过特征来理解数据结构！因为数据结构是为了满足某一要求（特征）而建立的！ 
 	int adjvex; 
-	int w=0;
 	InfoType *info;
 	struct ArcNode *nextarc;
 }ArcNode;
@@ -120,13 +119,45 @@ Status CreateUDN(ALGraph &G)
 	return Ok;
 }
 
+Status CreateDN(ALGraph &G)
+{
+	int i,j,k,w;
+	VertexType v1,v2;
+	ArcNode *pi,*pj;
+	printf("输入顶点数 G.vexnum：");scanf("%d",&G.vexnum);
+	printf("输入弧数 G.arcnum：");scanf("%d",&G.arcnum);
+	getchar();
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点 G.vertices[%d].data：",i);scanf("%c",&G.vertices[i].data);getchar();
+		G.vertices[i].firstarc=nullptr;//这句话一定不能漏掉啊！	否则就是野指针了，地址非空！
+						//使用指针前一定要检查指针是否有意义（野指针会带来极大的漏洞）
+						//甚至应该在创建指针的时候就另指针为空指针！ 
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("请输入第 %d 条弧的弧尾v1、弧头v2 以及权值 w (int)：\n",k+1);
+		scanf("%c %c %d",&v1,&v2,&w);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		if(!(pi=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
+		if(!(pi->info=(InfoType*)malloc(sizeof(InfoType))))exit(Overflow);
+		*pi->info=w;
+	//	pi->adjvex=i;pi->nextarc=G.vertices[i].firstarc;
+		//注意！！还是没有彻底理解图！
+		//关于顶点的邻接表！vex->adjvex是关于某一个顶点下的所有的邻接顶点的集合！ 
+		pi->adjvex=j;pi->nextarc=G.vertices[i].firstarc;
+		G.vertices[i].firstarc=pi;
+	}
+	return Ok;
+}
+
+
+
 Status CreateGraph(ALGraph &G)
 {
 	printf("请输入图的种类：0 表示 DG，1 表示 DN，2 表示 UDG，3 表示 UDN\n");
 	scanf("%d",&G.kind);
 	switch(G.kind){
 	//	case DG:return CreateDG(G);
-	//	case DN:return CreateDN(G);
+		case DN:return CreateDN(G);
 		case UDG:return CreateUDG(G);
 		case UDN:return CreateUDN(G);
 		default:return Error;
