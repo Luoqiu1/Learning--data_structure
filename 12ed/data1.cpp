@@ -170,6 +170,7 @@ Status CreateGraph(MGraph &G)
 		case DN:return CreateDN(G);
 		case UDG:return CreateUDG(G);
 		case UDN:return CreateUDN(G);
+		default:return Error;
 	}
 	return Ok;
 }

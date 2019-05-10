@@ -18,7 +18,7 @@ typedef struct ArcNode{
 	//还是忘记了，邻接表的特征啊！是在同一个顶点下的邻接的弧的集合！
 	//通过特征来理解数据结构！因为数据结构是为了满足某一要求（特征）而建立的！ 
 	int adjvex; 
-	//	
+	int w=0;
 	InfoType *info;
 	struct ArcNode *nextarc;
 }ArcNode;
@@ -68,11 +68,13 @@ Status CreateUDG(ALGraph &G)//无向图
 		i=LocateVex(G,v1);j=LocateVex(G,v2);
 		if(!(pi=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
 	//	else{   不必else，因为如果满足的话已经退出了 
+			pi->info=nullptr;
 			pi->adjvex=j;pi->nextarc=G.vertices[i].firstarc;// 这两行是插入链表
 			G.vertices[i].firstarc=pi;// 后来的弧插入在链表头结点的下一个链位置！ 
 	//	}
 		if(!(pj=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
 	//	else{
+			pj->info=nullptr;
 			pj->adjvex=i;pj->nextarc=G.vertices[j].firstarc;
 			G.vertices[j].firstarc=pj;
 	//	}
@@ -86,6 +88,38 @@ Status CreateUDG(ALGraph &G)//无向图
 	return Ok; 
 }
 
+Status CreateUDN(ALGraph &G)
+{
+	int i,j,k,w;
+	VertexType v1,v2;
+	ArcNode *pi,*pj;
+	printf("输入顶点数 G.vexnum：");scanf("%d",&G.vexnum);
+	printf("输入边数 G.arcnum：");scanf("%d",&G.arcnum);
+	getchar();
+	for(i=0;i<G.vexnum;++i){
+		printf("输入顶点 G.vertices[%d].data:",i);
+		scanf("%c",&G.vertices[i].data);getchar();
+		G.vertices[i].firstarc=nullptr;
+	}
+	for(k=0;k<G.arcnum;++k){
+		printf("请输入第 %d 条边的顶点 v1、v2 以及权值 w (int)：\n",k+1);
+		scanf("%c %c %d",&v1,&v2,&w);getchar();
+		i=LocateVex(G,v1);j=LocateVex(G,v2);
+		if(!(pi=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
+		if(!(pi->info=(InfoType*)malloc(sizeof(InfoType))))exit(Overflow);
+		//再次理解malloc！为某一指针分配一空间，其实就是分配了一个具体的地址！ 
+		*pi->info=w;
+		pi->adjvex=j;pi->nextarc=G.vertices[i].firstarc;
+		G.vertices[i].firstarc=pi;
+		if(!(pj=(ArcNode*)malloc(sizeof(ArcNode))))exit(Overflow);
+		if(!(pj->info=(InfoType*)malloc(sizeof(InfoType))))exit(Overflow);
+		*pj->info=w;
+		pj->adjvex=i;pj->nextarc=G.vertices[j].firstarc;
+		G.vertices[j].firstarc=pj;
+	}
+	return Ok;
+}
+
 Status CreateGraph(ALGraph &G)
 {
 	printf("请输入图的种类：0 表示 DG，1 表示 DN，2 表示 UDG，3 表示 UDN\n");
@@ -94,7 +128,7 @@ Status CreateGraph(ALGraph &G)
 	//	case DG:return CreateDG(G);
 	//	case DN:return CreateDN(G);
 		case UDG:return CreateUDG(G);
-	//	case UDN:return CreateUDN(G);
+		case UDN:return CreateUDN(G);
 		default:return Error;
 	}
 	return Ok; 
@@ -102,31 +136,20 @@ Status CreateGraph(ALGraph &G)
 
 void list(ALGraph G)
 {
-//	int i,j;
 	int i;
 	ArcNode *p;
 	printf("输出邻接表：\n\n");
-//	printf(" ----");
-//	for(i=0;i<G.vexnum;++i){
-//		printf("%4c",G.vertices[i].data);
-//	}
-//	printf("\n");
-//	for(i=0;i<G.vexnum;++i){
-//		printf("%c----".G.vertices[i].data);
-//		p=G.vertices[i].firstarc;
-//		
-//		for(j=0;j<G.vexnum;++j){
-//			while(p)
-//		}
-//	}
 	for(i=0;i<G.vexnum;++i){
 		printf("%d: %c--->",i,G.vertices[i].data);
 		p=G.vertices[i].firstarc;
 		while(p){
 			printf("%3d",p->adjvex);
+			if(p->info){
+				printf(",w=%4d ",*p->info);
+			}
 			p=p->nextarc;
 			if(p){
-				printf(" --->");
+				printf("--->");
 			}
 		}
 		printf("\n");
