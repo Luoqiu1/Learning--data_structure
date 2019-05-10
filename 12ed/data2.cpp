@@ -12,6 +12,7 @@ typedef char VertexType;
 typedef int InfoType;
 typedef int VRType;
 typedef enum{DG,DN,UDG,UDN}GraphKind;
+bool visited[MAX_VERTEX_NUM];
 
 typedef struct ArcNode{
 	
@@ -33,6 +34,81 @@ typedef struct ALGraph{
 	//当前情况下的顶点数及弧数 一定不要忘记啊。。。 
 	int vexnum,arcnum;
 }ALGraph;
+
+int NextAdjVex(ALGraph G,int v,int w)
+{
+//	printf("NAdj前 v=%d\n",v);
+	ArcNode *p=G.vertices[v].firstarc;
+//	if(p==nullptr)printf("  p==nullptr v=%d  ",v);
+	while(p){
+		if(p->adjvex==w){
+		//	if(p->nextarc&&!visited[p->nextarc->adjvex]) 
+							//完全不需要判断是否已经访问过！
+							//因为这个函数的目的仅仅是找到下一个邻接顶点！
+							//判断是否访问过在上一层函数中！if(!visited[w])里实现了！ 
+			if(p->nextarc) 
+				return p->nextarc->adjvex;
+		}
+	//	else p=p->nextarc; 啊啊啊啊！！一定不能是else！这样会少情况！
+					//对于定位到了的顶点位置，则不会再往前找后一个邻接顶点了！。。。
+		//实质上 深搜是一定不能用else的 因为是要每个都要遍历过去！ 
+		//加强对子条件的理解！ 
+							 
+		p=p->nextarc;
+	}
+//	printf("NAdj后 v=%d\n",v);
+	return -1;
+}
+
+int FirstAdjVex(ALGraph G,int v)
+{
+//	printf("FAdj前 v=%d\n",v);
+	if(G.vertices[v].firstarc){
+		return G.vertices[v].firstarc->adjvex;
+	}
+//	printf("FAdj后 v=%d\n",v);
+	else return -1;
+}
+
+void DFS(ALGraph G,int v)
+{
+//	printf("DFS v=%d\n",v);
+	printf("%c",G.vertices[v].data);
+	visited[v]=true;
+	for(int w=FirstAdjVex(G,v);w>=0;w=NextAdjVex(G,v,w))
+		if(!visited[w])DFS(G,w);
+}
+
+void DFSTraverse(ALGraph G)
+{
+	int v;
+	for(v=0;v<G.vexnum;++v){
+//		printf("DFSTraverse v=%d\n",v);
+		if(!visited[v]) DFS(G,v);
+	}
+}
+
+//void DFS(ALGraph G,int v)
+//{
+//	printf("%c",G.vertices[v].data);
+//	visited[v]=true;
+//	ArcNode *p=G.vertices[v].firstarc;
+//	while(p){
+//		if(!visited[p->adjvex]){
+//			DFS(G,p->adjvex);
+//		}
+//		
+//	}
+//}
+//
+//void DFSTraverse(ALGraph G)
+//{
+//	int v;
+//	for(v=0;v<G.vexnum;++V){
+//		if(!visited[v])DFS(G,v);
+//	}
+//}
+
 
 int LocateVex(ALGraph G,char v)
 {
@@ -214,6 +290,7 @@ int main ()
 	ALGraph G;
 	CreateGraph(G);
 	list(G);
+	DFSTraverse(G);
 	return 0;
 }
 
