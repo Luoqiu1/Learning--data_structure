@@ -21,7 +21,7 @@ typedef struct AdjCell{
 				//对于带权图，则为权值类型！（无穷大则为非相邻！） 
 	InfoType *info;
 }AdjCell,AdjMatrix[MAX_VERTEX_NUM][MAX_VERTEX_NUM];//理解结构体的结构！为什么是这样！ 
-typedef struct { 
+typedef struct {
 	AdjMatrix arcs;//数组邻接表的具体值直接表示是否存在这个弧！
 					//其数组的一 二维下标则已代表了 弧v1 v2！是有向的！
 									//无向图的话对称来，另[v2][v1]=[v1][v2]即可 
