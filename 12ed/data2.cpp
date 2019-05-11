@@ -98,28 +98,54 @@ Status EnQueue(LinkQueue &Q,QElemType e)
 	return Ok;
 }
 
-void BFS(ALGraph G,int v)
-{
-	LinkQueue Q;InitQueue(Q);
-	EnQueue(Q,v);visited[v]=true;
-	while(!QueueEmpty(Q)){
-		DeQueue(Q,v);printf("%c",G.vertices[v].data);
-		ArcNode *p=G.vertices[v].firstarc;
-		while(p){
-			if(!visited[p->adjvex]){
-				EnQueue(Q,p->adjvex);visited[p->adjvex]=true;
-			}
-			p=p->nextarc;
-		}
-	}
-}
+		//广搜算法一 
+//
+//void BFS(ALGraph G,int v)
+//{
+//	LinkQueue Q;InitQueue(Q);
+//	EnQueue(Q,v);visited[v]=true;
+//	while(!QueueEmpty(Q)){
+//		DeQueue(Q,v);printf("%c",G.vertices[v].data);
+//		ArcNode *p=G.vertices[v].firstarc;
+//		while(p){
+//			if(!visited[p->adjvex]){
+//				EnQueue(Q,p->adjvex);visited[p->adjvex]=true;
+//			}
+//			p=p->nextarc;
+//		}
+//	}
+//}
+//
+//void BFSTraverse(ALGraph G)
+//{
+//	int v;
+//	memset(visited,0,sizeof(visited));
+//	for(v=0;v<G.vexnum;++v){
+//		if(!visited[v])BFS(G,v);
+//	}
+//} 
+
+		//广搜算法二
 
 void BFSTraverse(ALGraph G)
 {
 	int v;
 	memset(visited,0,sizeof(visited));
+	LinkQueue Q;InitQueue(Q);
 	for(v=0;v<G.vexnum;++v){
-		if(!visited[v])BFS(G,v);
+		if(!visited[v]){
+			EnQueue(Q,v);visited[v]=true;
+			while(!QueueEmpty(Q)){
+				DeQueue(Q,v);printf("%c",G.vertices[v].data);
+				ArcNode *p=G.vertices[v].firstarc;
+				while(p){
+					if(!visited[p->adjvex]){
+						EnQueue(Q,p->adjvex);visited[p->adjvex]=true;
+					}
+					p=p->nextarc;
+				}
+			}
+		}
 	}
 } 
 
