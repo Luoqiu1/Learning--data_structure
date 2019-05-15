@@ -199,17 +199,24 @@ Status MiniSpanTree_PRIM(MGraph G,VertexType u)
 	for(int i=0;i<G.vexnum;++i){
 		if(i!=k){
 			Aid[i].lowcost=G.arcs[k][i].adj;
-			Aid[i].adjvex=G.vexs[i];
+			Aid[i].adjvex=G.vexs[k];
 		}
 	}
 	Aid[k].lowcost=0;Aid[k].adjvex=u;
+//	cout<<endl;
+//	for(int i=0;i<G.vexnum;++i)if(Aid[i].lowcost!=INFINITY)cout<<Aid[i].lowcost;else cout<<"s"; 
 	for(int i=1;i<G.vexnum;++i){
+		int min=INFINITY;
 		for(int j=0;j<G.vexnum;++j){//找出最小的邻边！ 
-			int min=INFINITY;
-			if(Aid[j].lowcost<min&&Aid[j].lowcost){
+		//	int min=INFINITY;
+			//啊啊啊啊上一行真是傻了。。。每一次新循环都会重置啊！仔细。。 
+			if(Aid[j].lowcost<min&&Aid[j].lowcost!=0){
 				min=Aid[j].lowcost;k=j;
+	//			cout<<"k="<<k; 
 			}
 		}
+	//	printf("now k=%d\n",k);
+		Aid[k].lowcost=0;
 		printf("%c%c ",G.vexs[k],Aid[k].adjvex);
 		for(int i=0;i<G.vexnum;++i){
 			if(Aid[i].lowcost>G.arcs[k][i].adj){
@@ -226,7 +233,8 @@ int main()
 	MGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("输出最小生成树：\n");
+	printf("\n");
+	printf("输出最小生成树（的边，有序无向弧）：\n");
 	MiniSpanTree_PRIM(G,'a');
 	printf("\n");
 	return 0;
