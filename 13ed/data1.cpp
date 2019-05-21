@@ -237,17 +237,22 @@ Status ShortestPath_DIJ(MGraph G,int v0)
 		//		}
 				if(min+G.arcs[k][j].adj<D[j]){
 					D[j]=min+G.arcs[k][j].adj;
-					P[j]=P[k];//    这两句很重要！ 首先将 从v0到k的路径更新至v0到j的路径上！ 
+					for(int z=0;z<G.vexnum;++z)P[j][z]=P[k][z];//    这两句很重要！ 首先将 从v0到k的路径更新至v0到j的路径上！ 
 					P[j][j]=true;    			//再加上 k到j的路径 j！ 
 				}
 		}
 	}
 	for(i=1;i<G.vexnum;++i){
 		printf("从 v0 到 v%d ：\n",i);
-		for(j=0;j<G.vexnum;++j){
-			if(final[j])printf("%c",G.vexs[j]);
+		if(final[i]){
+			printf("最短路径为（非顺序排列）：");
+			for(j=0;j<G.vexnum;++j){
+				if(P[i][j])
+					printf("%c",G.vexs[j]);
+			}
+			printf("\n最短路径长度为：%d\n\n",D[i]);
 		}
-		printf("%10d\n",D[j]);
+		else printf("两顶点之间无路径\n\n"); 
 	} 
 	return Ok;
 }
