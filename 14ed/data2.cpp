@@ -139,7 +139,6 @@ Status CreateDN(MGraph &G)
 	for(i=0;i<G.vexnum;++i){
 		for(j=0;j<G.vexnum;++j){
 			G.arcs[i][j].adj=INFINITY;
-			if(i==j)G.arcs[i][j].adj=0;
 			G.arcs[i][j].info=nullptr;
 		}
 	}
@@ -203,20 +202,11 @@ Status ShortestPath_FLOYD(MGraph G,int v0)
 	for(i=0;i<G.vexnum;++i){
 		for(j=0;j<G.vexnum;++j){
 			D[i][j]=G.arcs[i][j].adj;
-			if(D[i][j]<INFINITY&&!D[i][j]){
+			if(D[i][j]<INFINITY){
 				P[i][j][i]=true;P[i][j][j]=true;
 			}
 		}
-	}
-	
-	for(k=0;k<G.vexnum;++k){
-		for(i=0;i<G.vexnum;++i){
-			for(j=0;j<G.vexnum;++j){
-				printf("%d%d%d %d\n",k,i,j,P[k][i][j]);
-			}
-		}	
-	}
-	
+	}	
 	for(k=0;k<G.vexnum;++k){
 		for(i=0;i<G.vexnum;++i){
 			for(j=0;j<G.vexnum;++j){
@@ -229,17 +219,9 @@ Status ShortestPath_FLOYD(MGraph G,int v0)
 			}
 		}	
 	}
-	
-	for(k=0;k<G.vexnum;++k){
-		for(i=0;i<G.vexnum;++i){
-			for(j=0;j<G.vexnum;++j){
-				printf("%d%d%d %d\n",k,i,j,P[k][i][j]);
-			}
-		}	
-	}
-	
-	for(i=1;i<G.vexnum;++i){
-		printf("从 v0 到 v%d ：\n",i);
+	for(i=0;i<G.vexnum;++i){
+		if(i==v0)continue;
+		printf("从 v%d 到 v%d ：\n",v0,i);
 		bool flag=false;
 		for(k=0;k<G.vexnum;++k){
 			if(P[v0][i][k]){

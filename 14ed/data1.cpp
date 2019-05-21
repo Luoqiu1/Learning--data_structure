@@ -192,7 +192,7 @@ int D[MAX_VERTEX_NUM];
 
 Status ShortestPath_DIJ(MGraph G,int v0)
 {
-	int i,j,min=INFINITY,k;
+	int i,j,min=INFINITY,k=INFINITY;
 	final[v0]=true;P[v0][v0]=true;
 	for(i=0;i<G.vexnum;++i){
 		if(i==v0)continue;
@@ -222,10 +222,11 @@ Status ShortestPath_DIJ(MGraph G,int v0)
 			}
 		}
 	//	P[k][k]=true;最短路径还没更新呢！。。在下面的循环中才更新最短路径的顶点！ 
-		final[k]=true;
-		for(j=0;j<G.vexnum;++j){
+		if(k!=INFINITY){
+			final[k]=true;
+			for(j=0;j<G.vexnum;++j){
 			// 这里漏了一个判断条件！当下顶点是否已经被选入进最短路径中 ！ 
-			if(!final[j])
+				if(!final[j])
 			//
 		//		if(G.arcs[v0][j].adj+G.arcs[j][k].adj<D[k]){
 		//			D[k]=G.arcs[v0][j].adj+G.arcs[j][k].adj; //不是判断弧与弧的关系！
@@ -235,16 +236,18 @@ Status ShortestPath_DIJ(MGraph G,int v0)
 												//       与v0与	这个顶点相关的另一顶点的权值
 												//				相比较！	 
 		//		}
-				if(min+G.arcs[k][j].adj<D[j]){
-					D[j]=min+G.arcs[k][j].adj;
-					for(int z=0;z<G.vexnum;++z)P[j][z]=P[k][z];//这两句很重要！
-											//首先将从v0到k的路径更新至v0到j的路径上！ 
-					P[j][j]=true;    			//再加上 k到j的路径 j！ 
-				}
+					if(min+G.arcs[k][j].adj<D[j]){
+						D[j]=min+G.arcs[k][j].adj;
+						for(int z=0;z<G.vexnum;++z)P[j][z]=P[k][z];//这两句很重要！
+												//首先将从v0到k的路径更新至v0到j的路径上！ 
+						P[j][j]=true;    			//再加上 k到j的路径 j！ 
+					}
+			}
 		}
 	}
-	for(i=1;i<G.vexnum;++i){
-		printf("从 v0 到 v%d ：\n",i);
+	for(i=0;i<G.vexnum;++i){
+		if(i==v0)continue;
+		printf("从 v%d 到 v%d ：\n",v0,i);
 		if(final[i]){
 			printf("最短路径为（非顺序排列）：");
 			for(j=0;j<G.vexnum;++j){
