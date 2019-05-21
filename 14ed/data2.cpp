@@ -247,7 +247,7 @@ int main()
 	MGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("\n请输入 顶点v0，以便开始计算从 顶点v0 开始到 其余顶点 的最短路径即其路径长度：v0=");
+	printf("\n请输入 顶点v，以便开始计算从 顶点v 开始到 其余顶点 的最短路径即其路径长度：v=");
 	char ch;scanf("%c",&ch); 
 	printf("输出最短路径所经过的顶点（非顺序排列）以及最短路径长度：\n");
 	ShortestPath_FLOYD(G,LocateVex(G,ch));
@@ -255,14 +255,3 @@ int main()
 	printf("\n");
 	return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
