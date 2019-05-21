@@ -139,6 +139,7 @@ Status CreateDN(MGraph &G)
 	for(i=0;i<G.vexnum;++i){
 		for(j=0;j<G.vexnum;++j){
 			G.arcs[i][j].adj=INFINITY;
+			if(i==j)G.arcs[i][j].adj=0;
 			G.arcs[i][j].info=nullptr;
 		}
 	}
@@ -202,42 +203,56 @@ Status ShortestPath_FLOYD(MGraph G,int v0)
 	for(i=0;i<G.vexnum;++i){
 		for(j=0;j<G.vexnum;++j){
 			D[i][j]=G.arcs[i][j].adj;
-			if(D[i][j]<INFINITY){
+			if(D[i][j]<INFINITY&&!D[i][j]){
 				P[i][j][i]=true;P[i][j][j]=true;
 			}
 		}
 	}
+	
+	for(k=0;k<G.vexnum;++k){
+		for(i=0;i<G.vexnum;++i){
+			for(j=0;j<G.vexnum;++j){
+				printf("%d%d%d %d\n",k,i,j,P[k][i][j]);
+			}
+		}	
+	}
+	
 	for(k=0;k<G.vexnum;++k){
 		for(i=0;i<G.vexnum;++i){
 			for(j=0;j<G.vexnum;++j){
 				if(D[i][k]+D[k][j]<D[i][j]){
 					D[i][j]=D[i][k]+D[k][j];
 					for(int z=0;z<G.vexnum;++z){
-						P[i][j][z]=P[i][k][z];
+						P[i][j][z]=(P[i][k][z]||P[k][j][z]);
 					}
 				}
 			}
 		}	
 	}
+	
+	for(k=0;k<G.vexnum;++k){
+		for(i=0;i<G.vexnum;++i){
+			for(j=0;j<G.vexnum;++j){
+				printf("%d%d%d %d\n",k,i,j,P[k][i][j]);
+			}
+		}	
+	}
+	
 	for(i=1;i<G.vexnum;++i){
 		printf("从 v0 到 v%d ：\n",i);
 		bool flag=false;
-		for(j=0;j<G.vexnum;++j){
-			for(k=0;k<G.vexnum;++k){
-				if(P[v0][j][k]){
+		for(k=0;k<G.vexnum;++k){
+			if(P[v0][i][k]){
 					flag=true;break;
 				}
 			}
-			if(flag)break;
-		}
-		if(flag){
-			printf("最短路径为（非顺序排列）：");
+			if(flag){
+				printf("最短路径为（非顺序排列）：");
 				for(k=0;k<G.vexnum;++k){
 					if(P[v0][i][k]){
-						printf("%c",G.vexs[k]);
+					printf("%c",G.vexs[k]);
 				}
 			}
-		}
 			printf("\n最短路径长度为：%d\n\n",D[v0][i]);
 		}
 		else printf("两顶点之间无路径\n\n"); 
