@@ -187,41 +187,34 @@ void list(MGraph G)
 	}
 }
 
-typedef struct mini{
-	VertexType adjvex;//理解这个辅助数组的数据结构！
-					//这个adjvex 代表的是弧尾的值了！ 
-	VRType lowcost;
-}closedge[MAX_VERTEX_NUM];
+bool P[MAX_VERTEX_NUM][MAX_VERTEX_NUM],final[MAX_VERTEX_NUM];
+int D[MAX_VERTEX_NUM];
 
-Status MiniSpanTree_PRIM(MGraph G,VertexType u)
+Status ShortestPath_DIJ(MGraph G,int v0)
 {
-	int k=LocateVex(G,u);closedge Aid;
-	for(int i=0;i<G.vexnum;++i){
-		if(i!=k){
-			Aid[i].lowcost=G.arcs[k][i].adj;
-			Aid[i].adjvex=G.vexs[k];
+	int i,j,min=INFINITY,k;
+	final[v0]=true;
+	for(i=0;i<G.vexnum;++i){
+		if(i==v0)continue;
+		D[i]=G.arcs[v0][i].adj;
+		if(D[i]<min){
+			min=D[i];k=i;
 		}
 	}
-	Aid[k].lowcost=0;Aid[k].adjvex=u;
-//	cout<<endl;
-//	for(int i=0;i<G.vexnum;++i)if(Aid[i].lowcost!=INFINITY)cout<<Aid[i].lowcost;else cout<<"s"; 
-	for(int i=1;i<G.vexnum;++i){
-		int min=INFINITY;
-		for(int j=0;j<G.vexnum;++j){//找出最小的邻边！ 
-		//	int min=INFINITY;
-			//啊啊啊啊上一行真是傻了。。。每一次新循环都会重置啊！仔细。。 
-			if(Aid[j].lowcost<min&&Aid[j].lowcost!=0){
-				min=Aid[j].lowcost;k=j;
-	//			cout<<"k="<<k; 
+	final[k]=true;P[v0][k]=true;
+	for(i=1;i<G.vexnum;++i){
+		min=INFINITY;
+		for(j=0;j<G.vexnum;++j){
+			if(!final[j]){
+				if(G.arcs[i][j].adj<min){
+					min=G.arcs[i][j].adj;k=j;
+				}
 			}
 		}
-	//	printf("now k=%d\n",k);
-		Aid[k].lowcost=0;
-		printf("%c%c ",G.vexs[k],Aid[k].adjvex);
-		for(int i=0;i<G.vexnum;++i){
-			if(Aid[i].lowcost>G.arcs[k][i].adj){
-				Aid[i].lowcost=G.arcs[k][i].adj;
-				Aid[i].adjvex=G.vexs[k];
+		P[v0][k]=true;final[k]=true;
+		for(j=0;j<G.vexnum;++j){
+			if(G.arcs[v0][k].adj+G.arcs[k][i].adj<D[k]){
+				D[k]=G.arcs[v0][k].adj+G.arcs[k][i].adj;
 			}
 		}
 	}
@@ -233,9 +226,11 @@ int main()
 	MGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("\n");
-	printf("输出最小生成树（的边，有序无向弧）：\n");
-	MiniSpanTree_PRIM(G,'a');
+	printf("\n请输入 顶点v0，以便开始计算从 顶点v0 开始到 其余顶点 的最短路径即其路径长度：v0=");
+	char ch;scanf("%c",&ch); 
+	printf("输出最短路径所经过的顶点（非顺序排列）以及最短路径长度：\n");
+	ShortestPath_DIJ(G,LocateVex(G,ch));
+//	MiniSpanTree_PRIM(G,'a');
 	printf("\n");
 	return 0;
 }
