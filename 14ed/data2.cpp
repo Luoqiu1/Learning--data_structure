@@ -187,55 +187,74 @@ void list(MGraph G)
 	}
 }
 
-typedef struct mini{
-	VertexType adjvex;//理解这个辅助数组的数据结构！
-					//这个adjvex 代表的是弧尾的值了！ 
-	VRType lowcost;
-}closedge[MAX_VERTEX_NUM];
+bool P[MAX_VERTEX_NUM][MAX_VERTEX_NUM][MAX_VERTEX_NUM];
+int D[MAX_VERTEX_NUM][MAX_VERTEX_NUM];
 
-Status MiniSpanTree_PRIM(MGraph G,VertexType u)
+Status ShortestPath_FLOYD(MGraph G,int v0)
 {
-	int k=LocateVex(G,u);closedge Aid;
-	for(int i=0;i<G.vexnum;++i){
-		if(i!=k){
-			Aid[i].lowcost=G.arcs[k][i].adj;
-			Aid[i].adjvex=G.vexs[k];
-		}
-	}
-	Aid[k].lowcost=0;Aid[k].adjvex=u;
-//	cout<<endl;
-//	for(int i=0;i<G.vexnum;++i)if(Aid[i].lowcost!=INFINITY)cout<<Aid[i].lowcost;else cout<<"s"; 
-	for(int i=1;i<G.vexnum;++i){
-		int min=INFINITY;
-		for(int j=0;j<G.vexnum;++j){//找出最小的邻边！ 
-		//	int min=INFINITY;
-			//啊啊啊啊上一行真是傻了。。。每一次新循环都会重置啊！仔细。。 
-			if(Aid[j].lowcost<min&&Aid[j].lowcost!=0){
-				min=Aid[j].lowcost;k=j;
-	//			cout<<"k="<<k; 
-			}
-		}
-	//	printf("now k=%d\n",k);
-		Aid[k].lowcost=0;
-		printf("%c%c ",G.vexs[k],Aid[k].adjvex);
-		for(int i=0;i<G.vexnum;++i){
-			if(Aid[i].lowcost>G.arcs[k][i].adj){
-				Aid[i].lowcost=G.arcs[k][i].adj;
-				Aid[i].adjvex=G.vexs[k];
+	int i,j,k;
+//	for(i=0;i<G.vexnum;++i){
+//		D[v0][i]=G.arcs[v0][i].adj;			
+//		if								//该算法与dij算法不同！
+										//dij是先初始化关于顶点v0的所有边！
+										//该算法则是比较直观，直接对所有的顶点进行记录！ 
+//	}
+	for(i=0;i<G.vexnum;++i){
+		for(j=0;j<G.vexnum;++j){
+			D[i][j]=G.arcs[i][j].adj;
+			if(D[i][j]<INFINITY){
+				P[i][j][i]=true;P[i][j][j]=true;
 			}
 		}
 	}
+	for(k=0;k<G.vexnum;++k){
+		for(i=0;i<G.vexnum;++i){
+			for(j=0;j<G.vexnum;++j){
+				if(D[i][k]+D[k][j]<D[i][j]){
+					D[i][j]=D[i][k]+D[k][j];
+					for(int z=0;z<G.vexnum;++z){
+						P[i][j][z]=P[i][k][z];
+					}
+				}
+			}
+		}	
+	}
+	for(i=1;i<G.vexnum;++i){
+		printf("从 v0 到 v%d ：\n",i);
+		bool flag=false;
+		for(j=0;j<G.vexnum;++j){
+			for(k=0;k<G.vexnum;++k){
+				if(P[v0][j][k]){
+					flag=true;break;
+				}
+			}
+			if(flag)break;
+		}
+		if(flag){
+			printf("最短路径为（非顺序排列）：");
+				for(k=0;k<G.vexnum;++k){
+					if(P[v0][i][k]){
+						printf("%c",G.vexs[k]);
+				}
+			}
+		}
+			printf("\n最短路径长度为：%d\n\n",D[v0][i]);
+		}
+		else printf("两顶点之间无路径\n\n"); 
+	} 
 	return Ok;
-} 
+}
 
 int main()
 {
 	MGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("\n");
-	printf("输出最短：\n");
-	MiniSpanTree_PRIM(G,'a');
+	printf("\n请输入 顶点v0，以便开始计算从 顶点v0 开始到 其余顶点 的最短路径即其路径长度：v0=");
+	char ch;scanf("%c",&ch); 
+	printf("输出最短路径所经过的顶点（非顺序排列）以及最短路径长度：\n");
+	ShortestPath_FLOYD(G,LocateVex(G,ch));
+//	MiniSpanTree_PRIM(G,'a');
 	printf("\n");
 	return 0;
 }

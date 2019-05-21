@@ -187,55 +187,87 @@ void list(MGraph G)
 	}
 }
 
-typedef struct mini{
-	VertexType adjvex;//理解这个辅助数组的数据结构！
-					//这个adjvex 代表的是弧尾的值了！ 
-	VRType lowcost;
-}closedge[MAX_VERTEX_NUM];
+bool P[MAX_VERTEX_NUM][MAX_VERTEX_NUM],final[MAX_VERTEX_NUM];
+int D[MAX_VERTEX_NUM];
 
-Status MiniSpanTree_PRIM(MGraph G,VertexType u)
+Status ShortestPath_DIJ(MGraph G,int v0)
 {
-	int k=LocateVex(G,u);closedge Aid;
-	for(int i=0;i<G.vexnum;++i){
-		if(i!=k){
-			Aid[i].lowcost=G.arcs[k][i].adj;
-			Aid[i].adjvex=G.vexs[k];
+	int i,j,min=INFINITY,k;
+	final[v0]=true;P[v0][v0]=true;
+	for(i=0;i<G.vexnum;++i){
+		if(i==v0)continue;
+		D[i]=G.arcs[v0][i].adj;
+	//	if(D[i]<min){						↓ 
+	//		min=D[i];k=i;					
+	//	}						被注释的这几行错在没有正确理解最开始的这层循环是要干什么！
+						// 		是初始化最开始的有关于v0的所有路径！初始化时不需要找最小的边！ 
+						
+		if(D[i]<INFINITY){
+			P[i][v0]=true;P[i][i]=true;
 		}
+		
 	}
-	Aid[k].lowcost=0;Aid[k].adjvex=u;
-//	cout<<endl;
-//	for(int i=0;i<G.vexnum;++i)if(Aid[i].lowcost!=INFINITY)cout<<Aid[i].lowcost;else cout<<"s"; 
-	for(int i=1;i<G.vexnum;++i){
-		int min=INFINITY;
-		for(int j=0;j<G.vexnum;++j){//找出最小的邻边！ 
-		//	int min=INFINITY;
-			//啊啊啊啊上一行真是傻了。。。每一次新循环都会重置啊！仔细。。 
-			if(Aid[j].lowcost<min&&Aid[j].lowcost!=0){
-				min=Aid[j].lowcost;k=j;
-	//			cout<<"k="<<k; 
+//	final[k]=true;P[v0][k]=true;			↑ 
+	for(i=1;i<G.vexnum;++i){
+		min=INFINITY;
+		for(j=0;j<G.vexnum;++j){
+			if(!final[j]){
+			//	if(G.arcs[i][j].adj<min){
+			//		min=G.arcs[i][j].adj;k=j;		//  这里不是看弧的长度啊！
+												//是要找出当前下路径长度最短的路径！而不是比较弧长！
+			//	}									
+				if(D[j]<min){
+					min=D[j];k=j;
+				}
 			}
 		}
-	//	printf("now k=%d\n",k);
-		Aid[k].lowcost=0;
-		printf("%c%c ",G.vexs[k],Aid[k].adjvex);
-		for(int i=0;i<G.vexnum;++i){
-			if(Aid[i].lowcost>G.arcs[k][i].adj){
-				Aid[i].lowcost=G.arcs[k][i].adj;
-				Aid[i].adjvex=G.vexs[k];
-			}
+	//	P[k][k]=true;最短路径还没更新呢！。。在下面的循环中才更新最短路径的顶点！ 
+		final[k]=true;
+		for(j=0;j<G.vexnum;++j){
+			// 这里漏了一个判断条件！当下顶点是否已经被选入进最短路径中 ！ 
+			if(!final[j])
+			//
+		//		if(G.arcs[v0][j].adj+G.arcs[j][k].adj<D[k]){
+		//			D[k]=G.arcs[v0][j].adj+G.arcs[j][k].adj; //不是判断弧与弧的关系！
+												//是要判断当下的最新的最短路径与其相关的顶点的弧
+												//相加之和与v0与这个最短路径相关的顶点的路径相比较！
+												//即判断 最短路径+这个顶点相关的另一顶点的权值
+												//       与v0与	这个顶点相关的另一顶点的权值
+												//				相比较！	 
+		//		}
+				if(min+G.arcs[k][j].adj<D[j]){
+					D[j]=min+G.arcs[k][j].adj;
+					for(int z=0;z<G.vexnum;++z)P[j][z]=P[k][z];//这两句很重要！
+											//首先将从v0到k的路径更新至v0到j的路径上！ 
+					P[j][j]=true;    			//再加上 k到j的路径 j！ 
+				}
 		}
 	}
+	for(i=1;i<G.vexnum;++i){
+		printf("从 v0 到 v%d ：\n",i);
+		if(final[i]){
+			printf("最短路径为（非顺序排列）：");
+			for(j=0;j<G.vexnum;++j){
+				if(P[i][j])
+					printf("%c",G.vexs[j]);
+			}
+			printf("\n最短路径长度为：%d\n\n",D[i]);
+		}
+		else printf("两顶点之间无路径\n\n"); 
+	} 
 	return Ok;
-} 
+}
 
 int main()
 {
 	MGraph G;
 	CreateGraph(G);
 	list(G);
-	printf("\n");
-	printf("输出最短：\n");
-	MiniSpanTree_PRIM(G,'a');
+	printf("\n请输入 顶点v0，以便开始计算从 顶点v0 开始到 其余顶点 的最短路径即其路径长度：v0=");
+	char ch;scanf("%c",&ch); 
+	printf("输出最短路径所经过的顶点（非顺序排列）以及最短路径长度：\n");
+	ShortestPath_DIJ(G,LocateVex(G,ch));
+//	MiniSpanTree_PRIM(G,'a');
 	printf("\n");
 	return 0;
 }
