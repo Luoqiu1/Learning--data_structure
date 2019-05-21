@@ -193,31 +193,62 @@ int D[MAX_VERTEX_NUM];
 Status ShortestPath_DIJ(MGraph G,int v0)
 {
 	int i,j,min=INFINITY,k;
-	final[v0]=true;
+	final[v0]=true;P[v0][v0]=true;
 	for(i=0;i<G.vexnum;++i){
 		if(i==v0)continue;
 		D[i]=G.arcs[v0][i].adj;
-		if(D[i]<min){
-			min=D[i];k=i;
+	//	if(D[i]<min){						↓ 
+	//		min=D[i];k=i;					
+	//	}						被注释的这几行错在没有正确理解最开始的这层循环是要干什么！
+						// 		是初始化最开始的有关于v0的所有路径！初始化时不需要找最小的边！ 
+						
+		if(D[i]<INFINITY){
+			P[i][v0]=true;P[i][i]=true;
 		}
+		
 	}
-	final[k]=true;P[v0][k]=true;
+//	final[k]=true;P[v0][k]=true;			↑ 
 	for(i=1;i<G.vexnum;++i){
 		min=INFINITY;
 		for(j=0;j<G.vexnum;++j){
 			if(!final[j]){
-				if(G.arcs[i][j].adj<min){
-					min=G.arcs[i][j].adj;k=j;
+			//	if(G.arcs[i][j].adj<min){
+			//		min=G.arcs[i][j].adj;k=j;		//  这里不是看弧的长度啊！
+												//是要找出当前下路径长度最短的路径！而不是比较弧长！
+			//	}									
+				if(D[j]<min){
+					min=D[j];k=j;
 				}
 			}
 		}
-		P[v0][k]=true;final[k]=true;
+	//	P[k][k]=true;最短路径还没更新呢！。。在下面的循环中才更新最短路径的顶点！ 
+		final[k]=true;
 		for(j=0;j<G.vexnum;++j){
-			if(G.arcs[v0][k].adj+G.arcs[k][i].adj<D[k]){
-				D[k]=G.arcs[v0][k].adj+G.arcs[k][i].adj;
-			}
+			// 这里漏了一个判断条件！当下顶点是否已经被选入进最短路径中 ！ 
+			if(!final[j])
+			//
+		//		if(G.arcs[v0][j].adj+G.arcs[j][k].adj<D[k]){
+		//			D[k]=G.arcs[v0][j].adj+G.arcs[j][k].adj; //不是判断弧与弧的关系！
+												//是要判断当下的最新的最短路径与其相关的顶点的弧
+												//相加之和与v0与这个最短路径相关的顶点的路径相比较！
+												//即判断 最短路径+这个顶点相关的另一顶点的权值
+												//       与v0与	这个顶点相关的另一顶点的权值
+												//				相比较！	 
+		//		}
+				if(min+G.arcs[k][j].adj<D[j]){
+					D[j]=min+G.arcs[k][j].adj;
+					P[j]=P[k];//    这两句很重要！ 首先将 从v0到k的路径更新至v0到j的路径上！ 
+					P[j][j]=true;    			//再加上 k到j的路径 j！ 
+				}
 		}
 	}
+	for(i=1;i<G.vexnum;++i){
+		printf("从 v0 到 v%d ：\n",i);
+		for(j=0;j<G.vexnum;++j){
+			if(final[j])printf("%c",G.vexs[j]);
+		}
+		printf("%10d\n",D[j]);
+	} 
 	return Ok;
 }
 
