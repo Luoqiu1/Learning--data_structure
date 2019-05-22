@@ -188,7 +188,8 @@ void list(MGraph G)
 }
 
 typedef struct mini{
-	VertexType adjvex;
+	VertexType adjvex;//理解这个辅助数组的数据结构！
+					//这个adjvex 代表的是弧尾的值了！ 
 	VRType lowcost;
 }closedge[MAX_VERTEX_NUM];
 
@@ -202,13 +203,19 @@ Status MiniSpanTree_PRIM(MGraph G,VertexType u)
 		}
 	}
 	Aid[k].lowcost=0;Aid[k].adjvex=u;
+//	cout<<endl;
+//	for(int i=0;i<G.vexnum;++i)if(Aid[i].lowcost!=INFINITY)cout<<Aid[i].lowcost;else cout<<"s"; 
 	for(int i=1;i<G.vexnum;++i){
 		int min=INFINITY;
-		for(int j=0;j<G.vexnum;++j){
+		for(int j=0;j<G.vexnum;++j){//找出最小的邻边！ 
+		//	int min=INFINITY;
+			//啊啊啊啊上一行真是傻了。。。每一次新循环都会重置啊！仔细。。 
 			if(Aid[j].lowcost<min&&Aid[j].lowcost!=0){
 				min=Aid[j].lowcost;k=j;
+	//			cout<<"k="<<k; 
 			}
 		}
+	//	printf("now k=%d\n",k);
 		Aid[k].lowcost=0;
 		printf("%c%c ",G.vexs[k],Aid[k].adjvex);
 		for(int i=0;i<G.vexnum;++i){
@@ -219,7 +226,7 @@ Status MiniSpanTree_PRIM(MGraph G,VertexType u)
 		}
 	}
 	return Ok;
-}
+} 
 
 int main()
 {
@@ -227,7 +234,7 @@ int main()
 	CreateGraph(G);
 	list(G);
 	printf("\n");
-	printf("输出最小生成树：\n");
+	printf("输出最短：\n");
 	MiniSpanTree_PRIM(G,'a');
 	printf("\n");
 	return 0;

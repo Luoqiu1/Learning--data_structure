@@ -171,6 +171,36 @@ int main ()
 	printf("输出二叉排序树的后序遍历结果：\n");
 	PostOrderTraverse(T);
 	cout<<endl;
+	printf("输入查找结点的值：\n");
+	scanf("%d",&e.key);
+	bool flag=SearchBST(T,e.key,nullptr,s);
+	if(flag)printf("已找到！结点的八进制地址为：%o\n",&s);
+	else printf("未找到！\n");
+	printf("输入插入结点的值：\n",n);
+	scanf("%d",&e.key);
+	InsertBST(T,e);
+	printf("输出二叉排序树的先序遍历结果：\n");
+	PreOrderTraverse(T);
+	cout<<endl;
+	printf("输出二叉排序树的中序遍历结果：\n");
+	InOrderTraverse(T);
+	cout<<endl;
+	printf("输出二叉排序树的后序遍历结果：\n");
+	PostOrderTraverse(T);
+	cout<<endl;
+	printf("输入删除结点的值：\n");
+	scanf("%d",&e.key);
+	DeleteBST(T,e.key);
+	printf("输出二叉排序树的先序遍历结果：\n");
+	PreOrderTraverse(T);
+	cout<<endl;
+	printf("输出二叉排序树的中序遍历结果：\n");
+	InOrderTraverse(T);
+	cout<<endl;
+	printf("输出二叉排序树的后序遍历结果：\n");
+	PostOrderTraverse(T);
+	cout<<endl;
+	return 0;
 } 
 
 
