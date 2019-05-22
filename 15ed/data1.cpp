@@ -9,7 +9,7 @@ using namespace std;
 #define STACKINCREMENT 10
 typedef int KeyType;
 typedef int Status;
-typedef char TElemType;
+typedef int TElemType;
 typedef struct{
 	KeyType key;//¹Ø¼ü×ÖÓò 
 }ElemType;
@@ -87,7 +87,7 @@ Status PreOrderTraverse(BiTree T)
 	SqStack(S);InitStack(S);
 	while(T||!StackEmpty(S)){
 		while(T){
-			printf("%c",T->data);
+			printf("%d",T->data);
 			Push(S,T);
 			T=T->lchild;
 		}
@@ -110,7 +110,7 @@ Status InOrderTraverse(BiTree T)
 		}
 		if(!StackEmpty(S)){
 			Pop(S,T);
-			printf("%c",T->data);
+			printf("%d",T->data);
 			T=T->rchild;
 		}
 	}
@@ -125,7 +125,7 @@ Status PostOrderTraverse(BiTree T)
 	while(!StackEmpty(S)){
 		GetTop(S,T);
 		if(!T->lchild&&!T->rchild||pre&&(pre==T->lchild||pre==T->rchild)){
-			Pop(S,T);printf("%c",T->data);pre=T;
+			Pop(S,T);printf("%d",T->data);pre=T;
 		}
 		else{
 			if(T->rchild)Push(S,T->rchild);
