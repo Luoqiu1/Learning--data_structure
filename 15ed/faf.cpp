@@ -175,19 +175,6 @@ Status DeleteBST(BiTree &T,KeyType key,BiTree &parent)
 				parent->rchild=T->rchild; 
 			}
 		}
-		else{//既无左子树也无右子树
-			if(parent){//有父树 
-				if(parent->lchild->data==key){//是父树的左子树 
-					parent->lchild=nullptr;
-				}
-				else if(parent->rchild->data==key){//是父树的右子树 
-					parent->rchild=nullptr;
-				}
-			}
-			else{
-				T=nullptr;//整个树为空树 
-			}
-		}
 	}
 	else if(key<T->data){
 		return DeleteBST(T->lchild,key,T);
@@ -197,7 +184,9 @@ Status DeleteBST(BiTree &T,KeyType key,BiTree &parent)
 
 int main ()
 {
-	BiTree T=nullptr,s=nullptr,d=nullptr;
+	BiTree T=nullptr,s,d;
+	s->lchild=nullptr;s->rchild=nullptr;
+	d->lchild=nullptr;d->rchild=nullptr;
 	int n,i;
 	ElemType e;
 	printf("输入二叉排序树的结点数：");
