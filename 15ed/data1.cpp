@@ -150,6 +150,29 @@ Status InsertBST(BiTree &T,ElemType e)
 	return False;
 }
 
+Status DeleteBST(BiTree &T,KeyType key)
+{
+	if(!T)return False;
+	if(key==T->data){
+		if(T->lchild){//T有左子树 
+			if(T->lchild->rchild){//该左子树有右子树
+				BiTree p=T->lchild->rchild;p->lchild=nullptr;p->rchild=nullptr;
+				while(p->rchild)p=p->rchild;//找到最右下角的右子树
+				p->lchild=T->lchild;p->rchild=T->rchild;//该子树的左子树指向将被删除的树的左子树，右子树同理。 
+				T=p;//被删除的树被删除的同时等于了p指向的树
+				return Ok;
+			}
+			else{//该左子树无右子树 
+				
+			}
+		}
+	}
+	else if(key<T->data){
+		return DeleteBST(T->lchild,key);
+	}
+	else return DeleteBST(T->rchild,key);
+}
+
 int main ()
 {
 	BiTree T=nullptr,s;
