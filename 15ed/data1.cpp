@@ -162,8 +162,9 @@ Status DeleteBST(BiTree &T,KeyType key)
 				T=p;//被删除的树被删除的同时等于了p指向的树
 				return Ok;
 			}
-			else{//该左子树无右子树 
-				
+			else{//该左子树无右子树
+				T->lchild->rchild=T->rchild;//该左子树的右子树指向T树的右子树
+				T=T->lchild;//更新 
 			}
 		}
 	}
