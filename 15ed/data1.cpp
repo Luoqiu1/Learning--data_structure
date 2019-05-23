@@ -143,40 +143,50 @@ Status InsertBST(BiTree &T,ElemType e)
 		s->data=e.key;s->lchild=nullptr;s->rchild=nullptr;
 		//注意一开始！最开始是空树的情况。。此时p=nullptr!
 		if(!p)T=s;
-		else if(e.key<p->data)p->lchild=s;//
+		else if(e.key<p->data)p->lchild=s;
 		else p->rchild=s;
 		return Ok;
 	}
 	return False;
 }
 
-Status DeleteBST(BiTree &T,KeyType key)
+Status DeleteBST(BiTree &T,KeyType key,BiTree &parent)
 {
 	if(!T)return False;
 	if(key==T->data){
-		if(T->lchild){//T有左子树 
+		if(T->lchild){//T有左子树
 			if(T->lchild->rchild){//该左子树有右子树
 				BiTree p=T->lchild->rchild;p->lchild=nullptr;p->rchild=nullptr;
 				while(p->rchild)p=p->rchild;//找到最右下角的右子树
-				p->lchild=T->lchild;p->rchild=T->rchild;//该子树的左子树指向将被删除的树的左子树，右子树同理。 
+				p->lchild=T->lchild;p->rchild=T->rchild;//该子树的左子树指向将被删除的树的左子树，右子树同理 
 				T=p;//被删除的树被删除的同时等于了p指向的树
 				return Ok;
 			}
 			else{//该左子树无右子树
 				T->lchild->rchild=T->rchild;//该左子树的右子树指向T树的右子树
-				T=T->lchild;//更新 
+				T=T->lchild;//更新
+			}
+		}
+		else if(T->rchild){//T无左子树有右子树
+			if(!parent){//若是根结点
+				T=T->rchild;
+			}
+			else{//非根结点
+				parent->rchild=T->rchild; 
 			}
 		}
 	}
 	else if(key<T->data){
-		return DeleteBST(T->lchild,key);
+		return DeleteBST(T->lchild,key,T);
 	}
-	else return DeleteBST(T->rchild,key);
+	else return DeleteBST(T->rchild,key,T);
 }
 
 int main ()
 {
-	BiTree T=nullptr,s;
+	BiTree T=nullptr,s,d;
+	s->lchild=nullptr;s->rchild=nullptr;
+	d->lchild=nullptr;d->rchild=nullptr;
 	int n,i;
 	ElemType e;
 	printf("输入二叉排序树的结点数：");
@@ -214,7 +224,7 @@ int main ()
 	cout<<endl;
 	printf("输入删除结点的值：\n");
 	scanf("%d",&e.key);
-	DeleteBST(T,e.key);
+	DeleteBST(T,e.key,d);
 	printf("输出二叉排序树的先序遍历结果：\n");
 	PreOrderTraverse(T);
 	cout<<endl;
