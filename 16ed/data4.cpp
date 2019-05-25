@@ -53,20 +53,25 @@ Status HeapAdjust(SqList &L,int s,int m)
 		s=j;
 	}
 	L.r[s]=rc;
+	return Ok;
 }
 
-Status HeapSort(SqList &L,int s,int m)
+Status HeapSort(SqList &L)
 {
-	for(int i=m/2;i>=1;--i){
-		HeapAdjust(L,i,m);
+	for(int i=L.length/2;i>0;--i){
+		HeapAdjust(L,i,L.length);
 	}
-	for(int i=1;i<=m;++i){
+//	for(int i=1;i<=m;++i){
+	for(int i=L.length;i>1;--i){ //此处的i要联系下文循环体理解！。 
 		printf("%d ",L.r[1].key);
 		RedType tmp=L.r[1];
 		L.r[1]=L.r[i];
 		L.r[i]=tmp;
-		HeapAdjust(L,1,i-1);
+		HeapAdjust(L,1,i-1);//将 L.r[1...i-1]重新调整为大顶堆！... 
 	}
+	printf("%d",L.r[1].key);//最后一次只剩一个根结点了，此时尚未输出！(输出是在每一次重新调整为大顶堆前
+																			//故遗留了最后一次！ 
+	return Ok; 
 }
 
 int main ()
@@ -82,6 +87,6 @@ int main ()
 	printf("输出%d个元素的顺序表如下：\n",n);
 	DispList(L);
 	printf("简单选择排序结果如下：\n");
-	HeapSort(L,1,n);
+	HeapSort(L);
 	return 0;
 }
