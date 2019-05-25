@@ -47,8 +47,10 @@ Status HeapAdjust(SqList &L,int s,int m)
 {
 	RedType rc=L.r[s];
 	for(int j=2*s;j<=m;++j){
-		if(j<m&&L.r[j].key<L.r[j+1].key)++j;
-		if(rc.key>L.r[j].key)break;
+		if(j<m&&L.r[j].key<L.r[j+1].key)++j;//注意是比较j和j+1 ！不是s和j+1！ 
+		if(rc.key>L.r[j].key)break;//因为对无序堆的排序是从最下往上排的，必然保证了
+											//必然保证了当找到了一个j小于rc的关键字的时候可以结束循环！
+											//一两句说不清楚，再加强理解！ 
 		L.r[s]=L.r[j];
 		s=j;
 	}
@@ -86,7 +88,7 @@ int main ()
 	CreateList(L,n);
 	printf("输出%d个元素的顺序表如下：\n",n);
 	DispList(L);
-	printf("简单选择排序结果如下：\n");
+	printf("堆排序结果如下：\n");
 	HeapSort(L);
 	return 0;
 }
