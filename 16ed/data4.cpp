@@ -77,8 +77,12 @@ Status HeapSort(SqList &L)
 		HeapAdjust(L,i,L.length);
 	}
 //	for(int i=1;i<=m;++i){
-	for(int i=L.length;i>1;--i){ //此处的i要联系下文循环体理解！。 
-		printf("%d ",L.r[1].key);
+	for(int i=L.length;i>1;--i){ //此处的条件写为 i>1 要联系下文循环体理解！
+									//因为下文中参数有 (L,1,i-1)  
+		printf("%d ",L.r[1].key);	
+							//堆排序，大顶堆排序最后结果是非递减结果！
+							//一维数组里的线性非递减排序！
+							//不过这样有个好处，既可以输出非递增，又可以输出非递减！ 
 		RedType tmp=L.r[1];
 		L.r[1]=L.r[i];
 		L.r[i]=tmp;
@@ -101,7 +105,10 @@ int main ()
 	CreateList(L,n);
 	printf("输出%d个元素的顺序表如下：\n",n);
 	DispList(L);
-	printf("堆排序结果如下：\n");
+	printf("堆排序结果如下（非递增排序）：\n");
 	HeapSort(L);
+	printf("\n");
+	printf("堆排序结果如下（非递减排序）：\n");
+	DispList(L);
 	return 0;
 }
