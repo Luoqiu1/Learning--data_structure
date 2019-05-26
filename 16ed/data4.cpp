@@ -46,11 +46,18 @@ Status DispList(SqList L)
 Status HeapAdjust(SqList &L,int s,int m)
 {
 	RedType rc=L.r[s];
-	for(int j=2*s;j<=m;++j){
+//	for(int j=2*s;j<=m;++j){
+	for(int j=2*s;j<=m;j*=2){	//这里要仔细！！！每次j是指向j的子树！
+												//通常是左子树！
+								//若只是++j 则会指向j的右兄弟了！
+								 
 		if(j<m&&L.r[j].key<L.r[j+1].key)++j;//注意是比较j和j+1 ！不是s和j+1！ 
 		if(rc.key>L.r[j].key)break;//因为对无序堆的排序是从最下往上排的，必然保证了
 											//必然保证了当找到了一个j小于rc的关键字的时候可以结束循环！
 											//一两句说不清楚，再加强理解！ 
+											//简单理解就是 从局部到整体 的思想！
+											//从最开始的小局部每一个都满足
+											//则整体满足！ 
 		L.r[s]=L.r[j];
 		s=j;
 	}
