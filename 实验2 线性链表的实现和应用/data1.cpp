@@ -46,7 +46,9 @@ void ListInsert_L(LinkList L,int n,int k)
 	LinkList p;
 	LinkList x;
 	
-	while(i!=n){
+//	while(i!=n){
+	//有点问题，是在第i个元素之前！仔细。。
+	while(i!=n-1){
 		i++;
 		p=L->next;
 		L=p;
