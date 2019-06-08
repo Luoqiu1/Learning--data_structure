@@ -44,3 +44,20 @@ Status ListInsert_Sq(SqList &L,int i,ElemType e)
 	return Ok;
 }
 
+
+Status ListDelete_Sq(SqList &L,int i,ElemType &e)
+{
+	if(i<1||i>L.length)return Error;
+	if(!L.length)return Error;
+	e=L.elem[i-1];
+	for(int j=i-1;j<L.length-1;++j){
+		L.elem[j]=L.elem[j+1];
+	} 
+	--L.length;
+	return Ok;
+}
+
+
+
+
+
