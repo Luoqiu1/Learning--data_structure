@@ -39,6 +39,27 @@ Status ListInsert_L(LinkList &L,int i,ElemType e)
 	return Ok;
 }
 
+Status ListDelete_L(LinkList &L,int i,ElemType &e)
+{
+	if(!L)return Error;
+	LinkList p=L;int j=0;
+//	while(p&&j!=i-1){
+	//这条语句有一些不合理！因为之后要释放被删除的空间！
+	//倘若条件中只是看p是否非空的话，在循环体里进行到了p=p->next;
+	//p虽非空，但p->next为空，释放会出错！
+	//因为空指针无法释放！！
+	//理清楚这里关于p的条件为什么这样写！
+	while(p->next&&j!=i-1){
+	 
+		p=p->next;++j;
+	}
+	if(!p)return Error;
+	e=p->next->data;
+	LinkList s=p->next;
+	p->next=p->next->next;
+	free(s);
+	return Ok;
+}
 
 
 
