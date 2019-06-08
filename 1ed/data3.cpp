@@ -62,19 +62,24 @@ void DispList(SqList L)
 }
 void MergeList_Sq(SqList La,SqList Lb,SqList &Lc)
 {
-	ElemType *pa,*pb,*pc,*pa_last,*pb_last;
-	pb=Lb.elem;pa=La.elem;
-//	Lc.listsize=Lc.length=La.listsize+Lb.listsize;
-	pc=Lc.elem=(ElemType*)malloc(Lc.listsize*sizeof(ElemType));
-	if(!Lc.elem)exit(-2);
-	pa_last=La.elem+La.length-1;
-	pb_last=Lb.elem+Lb.length-1;
-	while(pa<=pa_last&&pb<=pb_last){
-		if(*pa<=*pb)*pc++=*pa++;
-		else *pc++=*pb++;
+	int ja,jb,jc;ja=jb=jc=0;
+	while(ja<La.length&&jb<Lb.length){
+		if(La.elem[ja]<Lb.elem[jb]){
+			Lc.elem[jc++]=La.elem[ja++];
+		}
+		else{
+			Lc.elem[jc++]=Lb.elem[jb++];
+		}
 	}
-	while(pa<=pa_last)*pc++=*pa++;
-	while(pb<=pb_last)*pc++=*pb++;
+
+	while(ja<La.length){
+		Lc.elem[jc++]=La.elem[ja++];
+	}
+	while(jb<Lb.length){
+	//	Lc.elem[jc++]=La.elem[jb++];
+		// 改没改全。。仔细
+		 Lc.elem[jc++]=Lb.elem[jb++];
+	}
 }
 int main ()
 {
