@@ -61,9 +61,68 @@ Status ClearQueue(LinkQueue &Q)
 	return Ok;
 }
 
+int QueueLength(LinkQueue Q)
+{
+	if(Q.front==Q.rear)return Error;
+	QueuePtr p=Q.front->next;int length=1;
+	while(p!=Q.rear){
+		++length;p=p->next;
+	}
+	return length;
+}
 
+Status GetHead(LinkQueue Q,QElemType &e)
+{
+	if(Q.front==Q.rear)return Error;
+	e=Q.front->next->data;
+	return Ok;
+}
 
+Status EnQueue(LinkQueue &Q,QElemType e)
+{
+	QueuePtr p=(QueuePtr)malloc(sizeof(QNode));
+	//下面这条语句别忘了。。健壮性！
+	if(!p)exit(Overflow);
+	 
+	p->data=e;p->next=nullptr;
+	Q.rear->next=p;Q.rear=p;
+	return Ok;
+}
 
+Status DeQueue(LinkQueue &Q,QElemType &e)
+{
+	if(Q.front==Q.rear)return Error;
+//	QueuePtr p=Q.front;
+//	while(p->next!=Q.rear){
+//		p=p->next;
+//	}
+//	e=Q.rear->data;
+//	if(Q.front->next=Q.rear){
+//		free(Q.rear);Q.rear=Q.front;Q.front->next=nullptr;
+//	}
+//	free(Q.rear);
+//	p->next=nullptr;Q.rear=p;
+	//傻了啊。。。。。队列是先进先出啊！！！出列是出队首元素！。。。
+	QueuePtr p=Q.front->next;
+	Q.front->next=Q.front->next->next;
+	e=p->data;
+	if(p==Q.rear)Q.rear=Q.front;
+	free(p);
+	return Ok;
+}
+
+Status QueueTraverse(LinkQueue Q)
+{
+	QueuePtr p=Q.front->next;
+	if(!p)return Error;
+	while(p){
+		cout<<p->data;
+		//这里到底错多少次了。。。!!!
+		//指针参加的循环，一定记得在循环体内改变指针啊！
+		p=p->next; 
+	}
+	return Ok;
+}
 
 
 
