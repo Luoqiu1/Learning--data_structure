@@ -60,6 +60,13 @@ Status Push(SqStack &S,SElemType e)
 	return Ok;
 }
 
+Stack Pop(SqStack &S,SElemType &e)
+{
+	if(S.base==S.top)return Error;
+	e=*--S.top;
+	return Ok;
+ } 
+
 
 
 
