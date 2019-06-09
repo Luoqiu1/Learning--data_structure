@@ -19,3 +19,37 @@ Status Go(LinkList &L,int n)
 	}
 	return True;
 } 
+
+Status Go(LinkList &L,int n)
+{
+	LinkList p,q;
+	p=L->next;q=p->next;
+	ElemType min=p->data;
+	while(n--){
+		while(q){
+			if(q->data<min){
+				min=q->data;
+			}
+			//傻了啊。。。没对q做操作，不是无限循环了！
+			// 指针里最容易出这个错。。！p=p->next 相当于i j循环里的自增 ++i ++j！！！
+			q=q->next;
+			 
+		}
+		if(min!=p->data){
+			q=p->next;
+			ElemType mid=p->data;
+			p->data=min;
+			while(q->data!=min){
+				q=q->data;
+			}
+			q->data=mid;
+		}
+		p=p->next;
+		q=p->next;
+	}
+	return True;
+ } 
+
+
+
+
