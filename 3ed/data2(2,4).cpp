@@ -56,12 +56,12 @@ Status Go(LinkList &L,int n)
 	p=L->next,q=p->next;
 	while(--n){
 		ElemType min=p->data;
-		do{
+		while(q!=NULL){
 			if(min>q->data){
 				min=q->data;
 			}
 			q=q->next;
-		}while(q!=NULL);
+		}
 		if(min!=p->data){
 			q=p->next;
 			ElemType mid=p->data;
