@@ -21,3 +21,50 @@ Status InitQueue(LinkQueue &Q)
 	//二者相等。 则想要找一个判断是否为空的基准比较困难！ 
 	return Ok;
 }
+
+Status DestroyQueue(LinkList &Q)
+{
+	if(Q.rear==Q.front)free(Q.front);
+	QueuePtr p=Q.front,q=p->next;
+	while(q!=Q.rear){
+		free(p);p=q;q=q->next;
+	}
+	//还有队尾没有释放
+	free(q);
+	//有更好的做法。直接利用Q.front和Q.rear，反正整个队列都要被销毁了，改变Q.front和Q.rear无所谓
+	
+	while(Q.front){
+		Q.rear=Q.front->next;
+		free(Q.front);
+		Q.front=Q.rear;
+	} 
+	
+	return Ok;
+}
+
+Status ClearQueue(LinkQueue &Q)
+{
+	if(Q.front==Q.rear)return Error;
+	//还有表一开始就不存在的时候
+	if(!Q.front)exit(Overflow);
+	 
+	QueuePtr p=Q.front->next,q=p;
+//	while(p){
+	//有问题。。这样会连Q.rear，队尾域一起删除掉了！
+	//应该保留队尾域，但是使队尾等于队头（空队列的标准） 
+	while(p!=Q.rear){
+	
+		free(p);p=q->next;q=p;
+	}
+	Q.front->next=nullptr;
+	Q.rear=Q.front;
+	return Ok;
+}
+
+
+
+
+
+
+
+
