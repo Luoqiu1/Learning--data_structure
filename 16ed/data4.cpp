@@ -74,11 +74,12 @@ Status HeapAdjust(SqList &L,int s,int m)
 Status HeapSort(SqList &L)
 {
 	for(int i=L.length/2;i>0;--i){
+					//即i>=1  
 		HeapAdjust(L,i,L.length);
 	}
 //	for(int i=1;i<=m;++i){
 	for(int i=L.length;i>1;--i){ //此处的条件写为 i>1 要联系下文循环体理解！
-									//因为下文中参数有 (L,1,i-1)  
+					//即i>=2				//因为下文中参数有 (L,1,i-1)  
 		printf("%d ",L.r[1].key);	
 							//堆排序，大顶堆排序最后结果是非递减结果！
 							//一维数组里的线性非递减排序！
