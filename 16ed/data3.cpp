@@ -53,9 +53,15 @@ Status SelectSort(SqList &L,int n)
 				loc=j;min=L.r[j].key;
 			}
 		}
-		L.r[0]=L.r[i];
-		L.r[i]=L.r[loc];
-		L.r[loc]=L.r[0];
+		//这里不够完善啊！也不是，是不够高效！
+		//当i==loc，即没找到最大的时候，没有交换的必要了！
+		//简单选择排序是不稳定的！ 例如 8 5 8 7 9 两次外循环后前后8交换了相对次序! 
+		if(i!=loc){
+		 
+			L.r[0]=L.r[i];
+			L.r[i]=L.r[loc];
+			L.r[loc]=L.r[0];
+		} 
 	}
 	return Ok;
 }
