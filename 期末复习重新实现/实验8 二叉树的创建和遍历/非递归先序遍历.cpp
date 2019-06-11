@@ -50,6 +50,43 @@ Status InOrderTraverse(BiTree T)
 		}
 	}
 }
+
+Status PostOrderTraverse(BiTree T)
+{
+	SqStack S;InitStack(S);
+	Push(S,T);
+	BiTree pre=nullptr;
+	while(!StackEmpty(S)){
+		//这里没那么多时间就暂时记一下。
+		//前序中序的判断条件是 T||!StackEmpty(S)
+		//				后序是 !StackEmpty(S) 
+		//跟着反向记，后序中先Push了根结点，所以可以直接用 !StackEmpty(S)
+		//				而前中序中在循环之前没有Push根结点！
+		 
+		if(!T->lchild&&!T->rchild||pre&&(pre==T->lchild||pre==T->rchild)){//找到了满足条件的结点 
+		//	pre=T;
+			//这个次序有问题啊。。pre应该是等于当前访问的这个。
+			//因为下一次判断时就对下个T来说，pre就是上一次访问的了！
+			//所以pre应该放在更新了T之后！也就是Pop（S，T）之后
+			//	写的栈操作中，Pop和Push都会更新T！ 
+			Pop(S,T);
+			printf("%c",T->data);
+			//这里
+			pre=T; 
+			
+		}
+	//	if(T->lchild)Push(S,T->lchild);
+	//	if(T->rchild)Push(S,T->rchild);
+		//应该是满足则出栈，输出
+		//未满足则入栈！。。
+		else{//未找到，入栈！ 
+			if(T->lchild)Push(S,T->lchild);
+			if(T->rchild)Push(S,T->rchild);
+		} 
+		
+	}
+ } 
+
  
 
  
