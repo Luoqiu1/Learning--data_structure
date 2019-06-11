@@ -49,6 +49,9 @@ int Partition(SqList &L,int low,int high)
 	while(low<high){    //这别忘了。。。！没有这个循环，下面两个循环只会进行一次！
 						//不会排到最终需要的 low等于high成立！ 
 		while(low<high&&L.r[0].key<=L.r[high].key)--high;
+		//这里需要注意！必须是小于等于，或者下面的必须是大于等于！
+		//因为相等的情况下不需要交换！交换了也是白换，而且实际上会导致程序错误！没有正确按要求
+		//换位置！将小的换到前面，将大的换到后面（与基准pivot相比！） 
 		L.r[low]=L.r[high];
 		while(low<high&&L.r[0].key>=L.r[low].key)++low;
 		L.r[high]=L.r[low];	
