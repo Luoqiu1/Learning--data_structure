@@ -104,7 +104,7 @@ int LocateVex(ALGraph G,VertexType e){
 Status DFS(ALGraph G,int loc)
 {
 	printf("%c",G.vertices[loc].data);
-	final[loc]=true;
+	visited[loc]=true;
 	ArcNode *p=G.vertices[loc].firstarc;
 	while(p){
 		if(!final[p->adjvex]){
@@ -115,10 +115,18 @@ Status DFS(ALGraph G,int loc)
 	return Ok;
 }
 
-Status DFSTraverse(ALGraph G,VertexType e)
+Status DFSTraverse(ALGraph G,VertexType e)//从顶点的数据为e开始深搜遍历 
 {
+	memset(visited,0,sizeof(visited));
+	//清空数组visited!
+	 
 	int loc=LocateVex(G,e);
-	DFS(G,loc);
+	DFS(G,loc);//不够完善！这才一次，倘若在loc结点下不能一次遍历完，则会有结点未遍历到！
+	for(int i=0;i<G.vexnum++i){
+		if(i!=loc){//loc这个顶点已经遍历过了！
+			DFS(G,i); 
+		}
+	} 
 	return Ok;
  } 
 
