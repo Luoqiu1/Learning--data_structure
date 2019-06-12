@@ -94,6 +94,35 @@ Status SearchGraph(MGraph G)
 
 
 
+int LocateVex(ALGraph G,VertexType e){
+	for(int i=0;i<G.vexnum;++i){
+		if(G.vertices[i].data==e)return i;
+	}
+	return Error;
+}
+
+Status DFS(ALGraph G,int loc)
+{
+	printf("%c",G.vertices[loc].data);
+	final[loc]=true;
+	ArcNode *p=G.vertices[loc].firstarc;
+	while(p){
+		if(!final[p->adjvex]){
+			DFS(G,p->adjvex);
+		}
+		p=p->nextarc;
+	}
+	return Ok;
+}
+
+Status DFSTraverse(ALGraph G,VertexType e)
+{
+	int loc=LocateVex(G,e);
+	DFS(G,loc);
+	return Ok;
+ } 
+
+
 
 
 
