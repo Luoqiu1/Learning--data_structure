@@ -123,12 +123,66 @@ Status DFSTraverse(ALGraph G,VertexType e)//从顶点的数据为e开始深搜遍历
 	int loc=LocateVex(G,e);
 	DFS(G,loc);//不够完善！这才一次，倘若在loc结点下不能一次遍历完，则会有结点未遍历到！
 	for(int i=0;i<G.vexnum++i){
-		if(i!=loc){//loc这个顶点已经遍历过了！
+	//	if(i!=loc){//loc这个顶点已经遍历过了！
+		//傻了 这个顶点有没有被访问过 忘记写了吗！。。
+		if(!visited[i]&&i!=loc){
 			DFS(G,i); 
 		}
 	} 
 	return Ok;
  } 
+
+
+Status BFSTraverse(ALGraph G,VertexType e)
+{
+	//先清空数组visited别忘了！
+	memset(visited,0,sizeof(visited));
+	 
+	int loc=LocateVex(G,e);
+	LinkQueue Q;InitQueue(Q);
+	printf("%c",G.vertices[loc].data);
+	ArcNode *p=G.vertices[loc].firstarc;
+	while(p){
+		if(!visited[p->adjvex]){
+			visited[p->adjvex]=true;
+			EnQueue(p->adjvex);
+		}
+		p=p->nextarc;
+	}
+	
+//	printf("%c",G.vertices[loc].data);
+
+	for(int i=0;i<G.vexnum;++i){
+	//	if(i!=loc){
+			//不够完善和严谨。。。记得一定要判断该结点是否访问过啊！
+		if(!visited[i]&&i!=loc){
+			//这里少了语句。。。
+			//当第一次广搜没有搜完的时候，要插入到队尾！
+			EnQueue(Q,i);visited[i]=true; 
+ 
+			while(!QueueEmpty(Q)){
+				int j;
+				DeQueue(Q,j);
+				printf("%c",G.vertices[j].data);
+				p=G.vertices[j].firstarc;
+				while(p){
+					if(!visited[p->adjvex]){
+						visited[p->adjvex]=true;
+						EnQueue(p->adjvex);
+					}
+					p=p->nextarc;
+				}
+			}
+		}
+	}
+}
+
+
+
+
+
+
+
 
 
 
